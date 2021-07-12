@@ -58,6 +58,14 @@ public class Graph {
     }
     
     /**
+     * Vraća boj vrhova u grafu
+     */
+    public int getN()
+    {
+        return this.n;
+    }
+    
+    /**
      * Vraća težinu brida između dva brida, ili null
      * ako brid ne postoji.
      * 

@@ -5,28 +5,34 @@
  */
 package NajkraciPutevi;
 
-import java . sql . Connection ;
-import java . sql . DatabaseMetaData ;
-import java . sql . DriverManager ;
-import java . sql . SQLException ;
+import java.sql.Connection ;
+import java.sql.DatabaseMetaData ;
+import java.sql.DriverManager ;
+import java.sql.SQLException ;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+
 
 /* baza se satoji od sljedećih tablica
  * graph - id, num_of_v
  * edge - id, graph_id, start_v, end_v, weight
  * algorithm - id, name, can_weights_be_negative
- * izvedeni_algoritam - id, graph_id, algoritm_id, duration
+ * completed_algorithm - id, graph_id, algorithm_id, duration
 */
 
 public class Database {
+    
+    String databaseName = " najkraciPutevi.db";
+    String url = " jdbc : sqlite :" + databaseName ;
     
     /* konstruktor stvara bazu i tablice (ako ne postoje) te
      * popuni tablicu algorithm
     */
     public Database() 
     {
-        String imeBaze = " najkraciPutevi.db";
-        String url = " jdbc : sqlite :" + imeBaze ;
-        try ( Connection conn = DriverManager.getConnection( url ) ) {
+      
+        try ( Connection conn = DriverManager.getConnection( this.url ) ) {
             if ( conn != null ) {
                 DatabaseMetaData meta = conn.getMetaData () ;
                 System.out.println("Ime biblioteke za rad s bazom podataka " + meta.getDriverName() ) ;
@@ -37,27 +43,26 @@ public class Database {
             System.out.println( e.getMessage() ) ;
         }
         
-        Database.createTables();
+        this.createTables();
     }
     
-    public static void createTables()
+    public void createTables()
     {
-        Database.createGraphTable();
-        Database.createAlgorithmTable();
-        Database.createEdgeTable();
-        Database.createCompletedAlgorithmTable();
+        this.createGraphTable();
+        this.createAlgorithmTable();
+        this.createEdgeTable();
+        this.createCompletedAlgorithmTable();
         
-        Database.insertAlgorithms();
+        this.insertAlgorithms();
     }
     
-    public static void createGraphTable()
+    public void createGraphTable()
     {
-        String fileName = "najkraciPutevi.db";
-        String url = " jdbc : sqlite :" + fileName ;
+   
         String sql = " CREATE TABLE IF NOT EXISTS graph (\n"+ 
           " id integer PRIMARY KEY ,\n"
           + " num_of_v integer NOT NULL ,\n" + ");";
-        try ( Connection conn = DriverManager.getConnection( url );
+        try ( Connection conn = DriverManager.getConnection( this.url );
         Statement stmt = conn.createStatement() ) {
             if ( conn != null ) { stmt.execute( sql ) ;}
         } 
@@ -66,7 +71,7 @@ public class Database {
         }
     }
     
-    public static void createAlgorithmTable()
+    public void createAlgorithmTable()
     {
         String fileName = "najkraciPutevi.db";
         String url = " jdbc : sqlite :" + fileName ;
@@ -83,7 +88,7 @@ public class Database {
         }
     }
     
-    public static void createEdgeTable()
+    public void createEdgeTable()
     {
         String fileName = "najkraciPutevi.db";
         String url = " jdbc : sqlite :" + fileName ;
@@ -92,16 +97,17 @@ public class Database {
           + " start_v integer NOT NULL ,\n" 
           + " end_v integer NOT NULL ,\n" 
           + " weight integer NOT NULL" + ");";
-        try ( Connection conn = DriverManager.getConnection( url );
-        Statement stmt = conn.createStatement() ) {
-            if ( conn != null ) { stmt.execute( sql ) ;}
+        try ( 
+             Connection conn = DriverManager.getConnection( url );
+             Statement stmt = conn.createStatement() ) {
+             if ( conn != null ) { stmt.execute( sql ) ;}
         } 
         catch ( SQLException e ) {
             System.out.println( e.getMessage() ) ; 
         }
     }
     
-    public static void createCompletedAlgorithmTable()
+    public void createCompletedAlgorithmTable()
     {
         String fileName = "najkraciPutevi.db";
         String url = " jdbc : sqlite :" + fileName ;
@@ -110,33 +116,97 @@ public class Database {
           + " graph_id integer NOT NULL ,\n" 
           + " algorithm_id integer NOT NULL ,\n" 
           + " duration text NOT NULL" + ");";
-        try ( Connection conn = DriverManager.getConnection( url );
-        Statement stmt = conn.createStatement() ) {
-            if ( conn != null ) { stmt.execute( sql ) ;}
+        try ( 
+             Connection conn = DriverManager.getConnection( this.url );
+             Statement stmt = conn.createStatement() ) {
+             if ( conn != null ) { stmt.execute( sql ) ;}
         } 
         catch ( SQLException e ) {
             System.out.println( e.getMessage() ) ; 
         }
     }
     
-    public static void insertAlgorithms()
+    public void insertAlgorithms()
     {
         
     }
     
-    public static void insertGraph( )
+    public void insertGraph( Graph G)
+    {
+        String sql = " INSERT INTO edge (id, num_of_v ) "
+                + "VALUES (? ,?)" ;
+        try {
+            Connection conn = DriverManager.getConnection( this.url );
+            PreparedStatement pstmt = conn.prepareStatement ( sql );
+            int id = 0; // odrediti id (row count + 1)
+            pstmt.setInt(1 , id );
+            pstmt.setInt(2 , G.getN() );
+            pstmt.executeUpdate ();
+             }
+        catch ( SQLException e ) { }
+        
+        //this.insertEdge(...)
+    }
+    
+    public void insertEdge( int graph_id, int start, int end, int weight )
+    {
+        String sql = " INSERT INTO edge (id, graph_id , start_v , end_v, weight ) "
+                + "VALUES (? ,? ,? ,? ,?)" ;
+        
+        try {
+            Connection conn = DriverManager.getConnection( this.url );
+            PreparedStatement pstmt = conn.prepareStatement ( sql );
+            int id = 0; // odrediti id (row count + 1)
+            pstmt.setInt(1 , id );
+            pstmt.setInt(2 , graph_id );
+            pstmt.setInt(3 , start );
+            pstmt.setInt(4 , end );
+            pstmt.setInt(5 , weight );
+            pstmt.executeUpdate ();
+             }
+        catch ( SQLException e ) { }
+    }
+    
+    public void insertCompletedAlgorithm( int graph_id, int alg_id, String time)
+    {
+        String sql = " INSERT INTO completed_algorithm (id, graph_id , alg_id , duration ) "
+                + "VALUES (? ,? ,? ,?)" ;
+        
+        try {
+            Connection conn = DriverManager.getConnection( this.url );
+            PreparedStatement pstmt = conn.prepareStatement ( sql );
+            int id = 0; // odrediti id (row count + 1)
+            pstmt.setInt(1 , id );
+            pstmt.setInt(2 , graph_id );
+            pstmt.setInt(3 , alg_id );
+            pstmt.setString(4 , time );
+            pstmt.executeUpdate ();
+             }
+        catch ( SQLException e ) { }
+    }
+    
+    public void selectGraphById( int id )
     {
         
     }
     
-    public static void insertEdge()
+    public void selectCompletedAlgorithmsByGraphId( int id )
     {
-        
-    }
-    
-    public static void insertCompletedAlgorithm()
-    {
-        
+        String sql = " SELECT graph_id , algorithm_id , duration FROM completed_algorithm"
+                + "WHERE graph_id = ? ";
+        try {
+            Connection conn = DriverManager.getConnection( this.url );
+            PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt.setInt(1 , id );
+            
+            ResultSet rs = pstmt.executeQuery ( sql );
+            while ( rs.next() ) {
+               
+            }
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage () ) ;
+        }
     }
     
 }
