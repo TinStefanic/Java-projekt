@@ -151,7 +151,7 @@ public class Database {
        
         for( int i = 0; i < G.getN(); ++i ){
             for( int j = 0; j <  G.getN(); ++j){
-                this.insertEdge(id, i, j, G.weightBetween(i, j));
+                this.insertEdge(id, i, j, G.getWeightBetween(i, j));
             }
         }
         
