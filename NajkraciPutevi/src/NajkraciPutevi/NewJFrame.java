@@ -1,4 +1,4 @@
-package NajkraciPutevi;
+package najkraciputevi;
 
 
 public class NewJFrame extends javax.swing.JFrame {

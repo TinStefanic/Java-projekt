@@ -1,4 +1,4 @@
-package NajkraciPutevi;
+package najkraciputevi;
 
 /**
  * Nadklasa za sve algoritme.
@@ -7,8 +7,11 @@ public abstract class GraphAlgorithm {
     // Zadnje vrijeme izvršavanja.
     private long lastTime = -1;
     
+    protected Graph g;
+    
     /**
      * Vraća najmanju udaljenost od vrha start do vrha end.
+     * Ako put ne postoji vraća null.
      * @param start početni vrh
      * @param end završni vrh
      * @return najmanja udaljenost između vrhova start i end
