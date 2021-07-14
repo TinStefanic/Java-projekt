@@ -1,4 +1,4 @@
-package NajkraciPutevi;
+package najkraciputevi;
 
 import java.util.ArrayList;
 import java.util.Random;
