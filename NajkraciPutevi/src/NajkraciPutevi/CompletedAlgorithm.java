@@ -15,12 +15,14 @@ package NajkraciPutevi;
 public class CompletedAlgorithm {
    
     private String name;
-    private long time;
+    private double time;
+    private int result;
     
-    public CompletedAlgorithm(String name, long time)
+    public CompletedAlgorithm(String name, double time, int result)
     {
         this.time = time;
         this.name = name;
+        this.result=result;
     }
     
     public String getName()
@@ -28,10 +30,14 @@ public class CompletedAlgorithm {
         return this.name;
     }
     
-    public long getTime()
+    public double getTime()
     {
         return this.time;
     }
     
+    public int getResult()
+    {
+        return this.result;
+    }
    
 }

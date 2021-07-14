@@ -27,8 +27,8 @@ import java.util.logging.Logger;
 
 public class Database {
     
-    String databaseName = " najkraciPutevi.db";
-    String url = " jdbc : sqlite :" + databaseName ;
+    String databaseName = "najkraciPutevi.db";
+    String url = " jdbc:sqlite:" + databaseName ;
     
     /* konstruktor stvara bazu i tablice (ako ne postoje) te
      * popuni tablicu algorithm
@@ -57,15 +57,20 @@ public class Database {
         this.createEdgeTable();
         this.createCompletedAlgorithmTable();
         
-        this.insertAlgorithms();
+        //this.insertAlgorithms();
     }
     
     public void createGraphTable()
     {
-   
+        
         String sql = " CREATE TABLE IF NOT EXISTS graph (\n"+ 
           " id integer PRIMARY KEY ,\n"
           + " num_of_v integer NOT NULL ,\n" + ");";
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try ( Connection conn = DriverManager.getConnection( this.url );
         Statement stmt = conn.createStatement() ) {
             if ( conn != null ) { stmt.execute( sql ) ;}
@@ -77,8 +82,6 @@ public class Database {
     
     public void createAlgorithmTable()
     {
-        String fileName = "najkraciPutevi.db";
-        String url = " jdbc : sqlite :" + fileName ;
         String sql = " CREATE TABLE IF NOT EXISTS algorithm (\n"+ 
           " id integer PRIMARY KEY ,\n"
           + " name text NOT NULL ,\n" 
@@ -94,14 +97,14 @@ public class Database {
     
     public void createEdgeTable()
     {
-        String fileName = "najkraciPutevi.db";
-        String url = " jdbc : sqlite :" + fileName ;
         String sql = " CREATE TABLE IF NOT EXISTS edge (\n"+ 
           " id integer PRIMARY KEY ,\n"
           + " start integer NOT NULL ,\n" 
           + " end integer NOT NULL ,\n" 
           + " weight integer NOT NULL" + ");";
+        //Class.forName("org.sqlite.JDBC");
         try ( 
+             
              Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
              if ( conn != null ) { stmt.execute( sql ) ;}
@@ -113,13 +116,12 @@ public class Database {
     
     public void createCompletedAlgorithmTable()
     {
-        String fileName = "najkraciPutevi.db";
-        String url = " jdbc : sqlite :" + fileName ;
         String sql = " CREATE TABLE IF NOT EXISTS completed_algorithm (\n"+ 
           " id integer PRIMARY KEY ,\n"
           + " graph_id integer NOT NULL ,\n" 
           + " algorithm_id integer NOT NULL ,\n" 
-          + " duration integer NOT NULL" + ");";
+          + " duration real NOT NULL, \n"
+          + " result integer NOT NULL);";
         try ( 
              Connection conn = DriverManager.getConnection( this.url );
              Statement stmt = conn.createStatement() ) {
@@ -248,7 +250,7 @@ public class Database {
     public ArrayList<CompletedAlgorithm> selectCompletedAlgorithmsByGraphId( int id )
     {
         ArrayList<CompletedAlgorithm> alg = new ArrayList<CompletedAlgorithm>();
-        String sql = " SELECT graph_id , algorithm_id , duration FROM completed_algorithm"
+        String sql = " SELECT graph_id , algorithm_id , duration, result FROM completed_algorithm"
                 + "WHERE graph_id = ? ";
         try {
             Connection conn = DriverManager.getConnection( this.url );
@@ -258,8 +260,9 @@ public class Database {
             ResultSet rs = pstmt.executeQuery( sql );
             while ( rs.next() ) {
                String name = this.selectAlgNameByAlgId(rs.getInt("algorithm_id"));
-               long time = rs.getInt("duration");
-               alg.add(new CompletedAlgorithm(name, time));
+               double time = rs.getDouble("duration");
+               int result = rs.getInt("result");
+               alg.add(new CompletedAlgorithm(name, time, result));
             }
         } 
         catch ( SQLException e ) {
