@@ -137,8 +137,8 @@ public class Database {
     
     public int insertGraph( Graph G ) //vraca id grafa
     {
-        int id = 0; // odredi id
-        String sql = " INSERT INTO edge (id, num_of_v ) "
+        int id = this.rowCount("graph") + 1; // odredi id
+        String sql = " INSERT INTO graph (id, num_of_v ) "
                 + "VALUES (? ,?)" ;
         try {
             Connection conn = DriverManager.getConnection( this.url );
@@ -154,14 +154,13 @@ public class Database {
                 this.insertEdge(id, i, j, G.getWeightBetween(i, j));
             }
         }
-        //this.insertEdge(...)
         
         return id;
     }
     
     public void insertEdge( int graph_id, int start, int end, int weight )
     {
-        int id = 0; // odrediti id (row count + 1)
+        int id = this.rowCount("edge") + 1; // odrediti id (row count + 1)
         String sql = " INSERT INTO edge (id, graph_id , start , end, weight ) "
                 + "VALUES (? ,? ,? ,? ,?)" ;
         
@@ -181,7 +180,7 @@ public class Database {
     
     public void insertCompletedAlgorithm( int graph_id, int alg_id, int time)
     {
-        int id = 0; // odrediti id (row count + 1)
+        int id = this.rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
         String sql = " INSERT INTO completed_algorithm (id, graph_id , alg_id , duration ) "
                 + "VALUES (? ,? ,? ,?)" ;
         
@@ -289,6 +288,25 @@ public class Database {
             name="";
         }
         return name;
+    }
+    
+    public int rowCount( String column)
+    {
+        String sql = " SELECT count(*) FROM " + column;
+        int count = 0;
+        try {
+            Connection conn = DriverManager.getConnection( this.url );
+            PreparedStatement pstmt = conn.prepareStatement( sql );
+            
+            ResultSet rs = pstmt.executeQuery( sql );
+            rs.next();
+            count = rs.getInt(1);
+            
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage () ) ;
+        }
+        return count;
     }
     
 }
