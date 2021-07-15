@@ -54,7 +54,7 @@ public final class Database {
     public void createTables()
     {
         createGraphTable();
-        createAlgorithmTable();
+       // createAlgorithmTable();
         createEdgeTable();
         createCompletedAlgorithmTable();
         createShortestPathEdgeTable();
@@ -78,7 +78,7 @@ public final class Database {
         }
     }
     
-    public void createAlgorithmTable() // možda nepotrebno
+    /*public void createAlgorithmTable() 
     {
         String sql = " CREATE TABLE IF NOT EXISTS algorithm (\n"+ 
           " name text PRIMARY KEY ,\n" 
@@ -90,7 +90,7 @@ public final class Database {
         catch ( SQLException e ) {
             System.out.println( e.getMessage() ) ; 
         }
-    }
+    }*/
     
     public void createEdgeTable()
     {
@@ -321,6 +321,35 @@ public final class Database {
             System.out.println( e.getMessage () ) ;
         }
         
+        return alg;
+    }
+    
+    public CompletedAlgorithm selectCompletedAlgorithByGraphIdandAlgName( int id, String alg_name)
+    {
+        CompletedAlgorithm alg = new CompletedAlgorithm();
+        String sql = " SELECT graph_id , alg_name , duration, result FROM completed_algorithm "
+                + "WHERE graph_id = ? AND alg_name = ?";
+        try {
+            Connection conn = DriverManager.getConnection( url );
+            PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt.setInt( 1, id );
+            pstmt.setString( 2, alg_name );
+            
+            ResultSet rs = pstmt.executeQuery( sql );
+            if(rs.next()){
+               String name = rs.getString("alg_name");
+               long time = rs.getLong("duration");
+               int result = rs.getInt("result");
+               int start = rs.getInt("start");
+               int end = rs.getInt("end");
+               alg = new CompletedAlgorithm(name, time, result, start, end);
+        }
+            
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage () ) ;
+           
+        }
         return alg;
     }
     
