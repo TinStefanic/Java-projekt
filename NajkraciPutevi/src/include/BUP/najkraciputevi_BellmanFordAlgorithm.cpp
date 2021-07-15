@@ -1,5 +1,5 @@
 #include <jni.h>
-#include "najkraciputevi_BellmanFordAlgorithm.h"
+#include "najkraciputevi_FloydWarshallAlgorithm.h"
 #include <vector>
 #include <utility>
 #include <climits>
@@ -7,7 +7,7 @@ using namespace std;
 
 JNIEXPORT jint JNICALL Java_najkraciputevi_BellmanFordAlgorithm_runAlgorithmNative(JNIEnv *env, jobject obj, jint start, jint end) {
     // Potrebne JNI methode.
-
+    /*
     jclass thisClass = env->GetObjectClass(obj);
     jfieldID fidG = env->GetFieldID(thisClass, "g", "Lnajkraciputevi/Graph;");
     jobject gObject = env->GetObjectField(obj, fidG);
@@ -54,6 +54,7 @@ JNIEXPORT jint JNICALL Java_najkraciputevi_BellmanFordAlgorithm_runAlgorithmNati
     for (int i = 0; i < n; ++i) {
         env->CallVoidMethod(obj, midSetParentAt, i, parent[i]);
     }
+    */
 
-    return minDist[end];
+    return 0;//minDist[end];
 }
