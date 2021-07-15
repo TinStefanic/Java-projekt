@@ -17,12 +17,16 @@ public class CompletedAlgorithm {
     private String name;
     private double time;
     private int result;
+    private int start;
+    private int end;
     
-    public CompletedAlgorithm(String name, double time, int result)
+    public CompletedAlgorithm(String name, double time, int result, int start, int end)
     {
         this.time = time;
         this.name = name;
         this.result = result;
+        this.start = start;
+        this.end = end;
     }
     
     public String getName()
@@ -38,6 +42,16 @@ public class CompletedAlgorithm {
     public int getResult()
     {
         return result;
+    }
+    
+    public int getStart()
+    {
+        return start;
+    }
+    
+    public int getEnd()
+    {
+        return end;
     }
     
 }
