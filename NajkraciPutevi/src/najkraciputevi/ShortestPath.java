@@ -28,6 +28,7 @@ public class ShortestPath {
     {
         start = s;
         end = e;
+        edges = new ArrayList<Edge>();
     }
     
     public int getStart()

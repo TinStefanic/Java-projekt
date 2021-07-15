@@ -5,18 +5,14 @@
  */
 package najkraciputevi;
 
-import najkraciputevi.DijkstraAlgorithm;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class DijkstraAlgorithmTest {
+public class BellmanFordAlgorithmTest {
     private Graph g;
     
-    public DijkstraAlgorithmTest() {
+    public BellmanFordAlgorithmTest() {
         g = new Graph(6);
         g.addEdge(0, 1, 1);
         g.addEdge(0, 2, 2);
@@ -28,11 +24,11 @@ public class DijkstraAlgorithmTest {
     }
 
     /**
-     * Test of runAlgorithm method, of class DijkstraAlgorithm.
+     * Test of runAlgorithm method, of class BellmanFordAlgorithm.
      */
     @Test
     public void testRunAlgorithm() {
-        DijkstraAlgorithm instance = new DijkstraAlgorithm(g);
+        BellmanFordAlgorithm  instance = new BellmanFordAlgorithm(g);
         assertEquals((Integer)1, instance.runAlgorithm(0, 1));
         assertEquals((Integer)3, instance.runAlgorithm(1, 2));
         assertEquals((Integer)5, instance.runAlgorithm(2, 3));
@@ -41,11 +37,11 @@ public class DijkstraAlgorithmTest {
     }
 
     /**
-     * Test of getShortestPath method, of class DijkstraAlgorithm.
+     * Test of getShortestPath method, of class BellmanFordAlgorithm.
      */
     @Test
     public void testGetShortestPath() {
-        DijkstraAlgorithm instance = new DijkstraAlgorithm(g);
+        BellmanFordAlgorithm instance = new BellmanFordAlgorithm (g);
         assertEquals(null, instance.getShortestPath());
         instance.query(0, 1);
         assertEquals("0->1", instance.getShortestPath().toString());

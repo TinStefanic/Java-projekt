@@ -1,12 +1,11 @@
 #include <jni.h>
-#include "najkraciputevi_DijkstraAlgorithm.h"
-#include <queue>
+#include "najkraciputevi_FloydWarshallAlgorithm.h"
 #include <vector>
 #include <utility>
-#include <functional>
+#include <climits>
 using namespace std;
 
-JNIEXPORT jint JNICALL Java_najkraciputevi_DijkstraAlgorithm_runAlgorithmNative(JNIEnv *env, jobject obj, jint start, jint end) {
+JNIEXPORT jint JNICALL Java_najkraciputevi_BellmanFordAlgorithm_runAlgorithmNative(JNIEnv *env, jobject obj, jint start, jint end) {
     // Potrebne JNI methode.
     jclass thisClass = env->GetObjectClass(obj);
     jfieldID fidG = env->GetFieldID(thisClass, "g", "Lnajkraciputevi/Graph;");
@@ -22,6 +21,8 @@ JNIEXPORT jint JNICALL Java_najkraciputevi_DijkstraAlgorithm_runAlgorithmNative(
 
     // Stvaranje grafa.
     jint n = env->CallIntMethod(gObject, midGetN);
+    vector<int> minDist(n, INT_MAX), parent(n, -1);
+    minDist[start] = 0;
     vector<vector<pair<int,int> > > g(n); // (neighbour, weight)
     for (int i = 0; i < n; ++i) {
         jint m = env->CallIntMethod(gObject, midGetNumNeighbours, i);
@@ -35,21 +36,14 @@ JNIEXPORT jint JNICALL Java_najkraciputevi_DijkstraAlgorithm_runAlgorithmNative(
     }
 
     // Algoritam.
-    vector<int> minDist(n, -1), parent(n, -1);
-    // U prioriti queue je (udaljenost, (trenutni čvor, prethodni čvor)).
-    priority_queue<pair<int,pair<int,int> >, vector<pair<int,pair<int,int> > >, greater<pair<int,pair<int,int> > > > pq;
-    pq.push(make_pair(0, make_pair(start, -1)));
-    while (pq.size()) {
-        int dist = pq.top().first;
-        int u = pq.top().second.first, v = pq.top().second.second;
-        pq.pop();
-        if (minDist[u] != -1) continue;
-        else {
-            minDist[u] = dist;
-            parent[u] = v;
-            if (u == end) break;
-            for (int l = 0; l < g[u].size(); ++l) {
-                pq.push(make_pair(dist+g[u][l].second, make_pair(g[u][l].first, u)));
+    for (int numLoops = 0; numLoops < n-1; ++numLoops) {
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < g[i].size(); ++j) {
+                int v = g[i][j].first, w = g[i][j].second;
+                if (minDist[i] != INT_MAX && minDist[i] + w < minDist[v]) {
+                    parent[v] = i;
+                    minDist[v] = minDist[i] + w;
+                }
             }
         }
     }

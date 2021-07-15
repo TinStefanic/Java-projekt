@@ -1,12 +1,10 @@
 #include <jni.h>
-#include "najkraciputevi_DijkstraAlgorithm.h"
-#include <queue>
+#include "najkraciputevi_FloydWarshallAlgorithm.h"
 #include <vector>
-#include <utility>
-#include <functional>
+#include <climits>
 using namespace std;
 
-JNIEXPORT jint JNICALL Java_najkraciputevi_DijkstraAlgorithm_runAlgorithmNative(JNIEnv *env, jobject obj, jint start, jint end) {
+JNIEXPORT jint JNICALL Java_najkraciputevi_FloydWarshallAlgorithm_runAlgorithmNative(JNIEnv *env, jobject obj, jint start, jint end) {
     // Potrebne JNI methode.
     jclass thisClass = env->GetObjectClass(obj);
     jfieldID fidG = env->GetFieldID(thisClass, "g", "Lnajkraciputevi/Graph;");
@@ -18,11 +16,11 @@ JNIEXPORT jint JNICALL Java_najkraciputevi_DijkstraAlgorithm_runAlgorithmNative(
     jmethodID midGetWeightAt = env->GetMethodID(gClass, "getWeightAt", "(II)Ljava/lang/Integer;");
     jmethodID midIntValue = env->GetMethodID(integerClass, "intValue", "()I");
     jmethodID midGetNumNeighbours = env->GetMethodID(gClass, "getNumNeighbours", "(I)I");
-    jmethodID midSetParentAt = env->GetMethodID(thisClass, "setParentAt", "(II)V");
+    jmethodID midSetMinDistAt = env->GetMethodID(thisClass, "setMinDistAt", "(II)V");
 
     // Stvaranje grafa.
     jint n = env->CallIntMethod(gObject, midGetN);
-    vector<vector<pair<int,int> > > g(n); // (neighbour, weight)
+    vector<vector<int> > minDist(n, vector<int>(n, INT_MAX));
     for (int i = 0; i < n; ++i) {
         jint m = env->CallIntMethod(gObject, midGetNumNeighbours, i);
         for (int j = 0; j < m; ++j) {
@@ -30,34 +28,26 @@ JNIEXPORT jint JNICALL Java_najkraciputevi_DijkstraAlgorithm_runAlgorithmNative(
             jint neighbour = env->CallIntMethod(neighbourInteger, midIntValue);
             jobject weightInteger = env->CallObjectMethod(gObject, midGetWeightAt, i, j);
             jint weight = env->CallIntMethod(weightInteger, midIntValue);
-            g[i].push_back(make_pair(neighbour, weight));
+            minDist[i][neighbour] = weight;
         }
+        minDist[i][i] = 0;
     }
 
     // Algoritam.
-    vector<int> minDist(n, -1), parent(n, -1);
-    // U prioriti queue je (udaljenost, (trenutni čvor, prethodni čvor)).
-    priority_queue<pair<int,pair<int,int> >, vector<pair<int,pair<int,int> > >, greater<pair<int,pair<int,int> > > > pq;
-    pq.push(make_pair(0, make_pair(start, -1)));
-    while (pq.size()) {
-        int dist = pq.top().first;
-        int u = pq.top().second.first, v = pq.top().second.second;
-        pq.pop();
-        if (minDist[u] != -1) continue;
-        else {
-            minDist[u] = dist;
-            parent[u] = v;
-            if (u == end) break;
-            for (int l = 0; l < g[u].size(); ++l) {
-                pq.push(make_pair(dist+g[u][l].second, make_pair(g[u][l].first, u)));
+    for (int k = 0; k < n; ++k) {
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (minDist[i][k] != INT_MAX && minDist[k][j] != INT_MAX && minDist[i][k]+minDist[k][j] < minDist[i][j]) {
+                    minDist[i][j] = minDist[i][k] + minDist[k][j];
+                }
             }
         }
     }
 
     // Za rekonstrukciju najkraćeg puta.
     for (int i = 0; i < n; ++i) {
-        env->CallVoidMethod(obj, midSetParentAt, i, parent[i]);
+        env->CallVoidMethod(obj, midSetMinDistAt, i, minDist[start][i]);
     }
 
-    return minDist[end];
+    return minDist[start][end];
 }
