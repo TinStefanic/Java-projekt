@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class GraphAlgorithmTest {
     final int n = 1000;
     final boolean directed = false;
-    final double density = 3. / n;
+    final double density = 3.;
     final int maxWeight = 1;
     
     public GraphAlgorithmTest() {

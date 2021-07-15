@@ -19,11 +19,12 @@ import javax.swing.JFileChooser;
  * @author winco
  */
 public class Gui extends javax.swing.JFrame {
-
     /**
      * Creates new form Gui
      */
+    Database db;
     public Gui() {
+        this.db = new Database();
         initComponents();
     }
 
@@ -59,23 +60,33 @@ public class Gui extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         nacrtaj = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        bellford = new javax.swing.JCheckBox();
+        dijk = new javax.swing.JCheckBox();
+        floyd = new javax.swing.JCheckBox();
         pokreni = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        dijktb = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        floydtb = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        bellfordbut = new javax.swing.JButton();
+        dijkbut = new javax.swing.JButton();
+        floydbut = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
+        bellfordtb = new javax.swing.JTextArea();
+        nonat = new javax.swing.JCheckBox();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        nonattb = new javax.swing.JTextArea();
+        nonatbut = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        startver = new javax.swing.JTextField();
+        endver = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,7 +128,7 @@ public class Gui extends javax.swing.JFrame {
 
         jLabel1.setText("Gustoća");
 
-        randensity.setText("0.2");
+        randensity.setText("3");
 
         diskbutton.setText("Učitaj sa diska");
         diskbutton.addActionListener(new java.awt.event.ActionListener() {
@@ -149,11 +160,11 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        jCheckBox1.setText("Algoritam1");
+        bellford.setText("Bellman-Ford");
 
-        jCheckBox2.setText("Algoritam2");
+        dijk.setText("Dijkstra");
 
-        jCheckBox3.setText("Algoritam3");
+        floyd.setText("Floyd-Warshall");
 
         pokreni.setText("Pokreni!");
         pokreni.addActionListener(new java.awt.event.ActionListener() {
@@ -162,35 +173,35 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        dijktb.setColumns(20);
+        dijktb.setRows(5);
+        jScrollPane2.setViewportView(dijktb);
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane3.setViewportView(jTextArea3);
+        floydtb.setColumns(20);
+        floydtb.setRows(5);
+        jScrollPane3.setViewportView(floydtb);
 
-        jLabel7.setText("Algoritam1");
+        jLabel7.setText("Bellman-Ford");
 
-        jLabel8.setText("Algoritam2");
+        jLabel8.setText("Dijkstra");
 
-        jLabel9.setText("Algoritam3");
+        jLabel9.setText("Floyd-Warshall");
 
-        jButton1.setText("Prikaži rješenje");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bellfordbut.setText("Prikaži rješenje");
+        bellfordbut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bellfordbutActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Prikaži rješenje");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        dijkbut.setText("Prikaži rješenje");
+        dijkbut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                dijkbutActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Prikaži rješenje");
+        floydbut.setText("Prikaži rješenje");
 
         jButton4.setText("Povijest upita");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -199,9 +210,26 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setRows(5);
-        jScrollPane4.setViewportView(jTextArea4);
+        bellfordtb.setColumns(20);
+        bellfordtb.setRows(5);
+        jScrollPane4.setViewportView(bellfordtb);
+
+        nonat.setText("Non-native");
+
+        jLabel10.setText("Non-native (test)");
+
+        nonattb.setColumns(20);
+        nonattb.setRows(5);
+        jScrollPane1.setViewportView(nonattb);
+
+        nonatbut.setText("Prikaži rješenje");
+
+        jLabel11.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel11.setText("*obavezno");
+
+        jLabel12.setText("Početni vrh");
+
+        jLabel13.setText("Završni vrh");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -217,14 +245,16 @@ public class Gui extends javax.swing.JFrame {
                                 .addComponent(neusmjereniradio)
                                 .addComponent(usmjereniradio)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(brojvrhovalabel)
-                                    .addGap(84, 84, 84)
-                                    .addComponent(vercnt, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
                                     .addComponent(edgecombo, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(edgelen, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(105, 105, 105))
+                                    .addComponent(edgelen, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(brojvrhovalabel)
+                                    .addGap(84, 84, 84)
+                                    .addComponent(vercnt, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabel11)))
+                            .addGap(28, 28, 28))
                         .addComponent(jSeparator2))
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
@@ -255,28 +285,41 @@ public class Gui extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nacrtaj)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jCheckBox2)
-                                .addComponent(jCheckBox1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jCheckBox3, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(dijk)
+                            .addComponent(nonat)
                             .addComponent(pokreni)
-                            .addComponent(jButton4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                            .addComponent(jButton4)
+                            .addComponent(bellford)
+                            .addComponent(floyd)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(startver, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(endver, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jButton1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(bellfordbut)
                                 .addComponent(jLabel7)
-                                .addComponent(jButton2)
+                                .addComponent(dijkbut)
                                 .addComponent(jLabel8)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(floydbut)
                                 .addComponent(jLabel9)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-                                .addComponent(jScrollPane4)))
-                        .addGap(57, 57, 57))))
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel10)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(nonatbut)))
+                        .addGap(14, 14, 14))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,31 +335,14 @@ public class Gui extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel8)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(usmjereniradio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(neusmjereniradio)
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(vercnt, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(brojvrhovalabel))
+                            .addComponent(brojvrhovalabel)
+                            .addComponent(jLabel11))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -345,17 +371,51 @@ public class Gui extends javax.swing.JFrame {
                             .addComponent(edgecombo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(nacrtaj)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox3)
-                        .addGap(8, 8, 8)
-                        .addComponent(pokreni)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(startver, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(endver, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                        .addComponent(bellford)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dijk)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(floyd)
+                        .addGap(1, 1, 1)
+                        .addComponent(nonat)
+                        .addGap(12, 12, 12)
+                        .addComponent(pokreni)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bellfordbut)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dijkbut)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(floydbut)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nonatbut)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -481,20 +541,45 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_diskbuttonActionPerformed
 
     private void nacrtajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nacrtajActionPerformed
-        // TODO add your handling code here:
+        DrawGraph dg = new DrawGraph(graph);
+        dg.draw();
     }//GEN-LAST:event_nacrtajActionPerformed
 
     private void pokreniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokreniActionPerformed
-        // TODO add your handling code here:
+        int id = db.insertGraph(graph);
+        String text = startver.getText();
+        String text2 = endver.getText();
+        try {
+            int start = Integer.parseInt(text);
+            int end = Integer.parseInt(text2);
+            if (bellford.isSelected()) {
+                var bfa = new BellmanFordAlgorithm(graph);
+                var at1 = new AlgorithmThread(bfa,db,id,start,end,bellfordtb);
+            }
+            if (dijk.isSelected()) {
+                var dj = new DijkstraAlgorithm(graph);
+                var at2 = new AlgorithmThread(dj,db,id,start,end,dijktb);
+            }
+            if (floyd.isSelected()) {
+                var fl = new FloydWarshallAlgorithm(graph);
+                var at3 = new AlgorithmThread(fl,db,id,start,end,floydtb);
+            }
+            if (nonat.isSelected()) {
+                var nn = new GraphAlgorithmTestOnly(graph);
+                var at4 = new AlgorithmThread(nn,db,id,start,end,nonattb);
+            }
+        } catch (NumberFormatException nfe) {
+            //what if it's not a num?
+        }
     }//GEN-LAST:event_pokreniActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void bellfordbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bellfordbutActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_bellfordbutActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void dijkbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dijkbutActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_dijkbutActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
@@ -536,20 +621,28 @@ public class Gui extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox bellford;
+    private javax.swing.JButton bellfordbut;
+    private javax.swing.JTextArea bellfordtb;
     private javax.swing.JLabel brojvrhovalabel;
+    private javax.swing.JCheckBox dijk;
+    private javax.swing.JButton dijkbut;
+    private javax.swing.JTextArea dijktb;
     private javax.swing.JButton diskbutton;
     private javax.swing.JComboBox<String> edgecombo;
     private javax.swing.JTextField edgelen;
     private javax.swing.JButton emptybutton;
+    private javax.swing.JTextField endver;
     private javax.swing.JFileChooser fileChooser;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JCheckBox floyd;
+    private javax.swing.JButton floydbut;
+    private javax.swing.JTextArea floydtb;
     private javax.swing.JButton jButton4;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -558,21 +651,23 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
     private javax.swing.JTextField maxweight;
     private javax.swing.JButton nacrtaj;
     private javax.swing.JRadioButton neusmjereniradio;
+    private javax.swing.JCheckBox nonat;
+    private javax.swing.JButton nonatbut;
+    private javax.swing.JTextArea nonattb;
     private javax.swing.JButton pokreni;
     private javax.swing.JTextField randensity;
     private javax.swing.JButton randombutton;
+    private javax.swing.JTextField startver;
     private javax.swing.ButtonGroup us_neus;
     private javax.swing.JRadioButton usmjereniradio;
     private javax.swing.JTextField vercnt;

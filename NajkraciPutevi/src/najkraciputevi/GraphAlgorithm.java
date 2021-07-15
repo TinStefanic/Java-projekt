@@ -7,6 +7,9 @@ public abstract class GraphAlgorithm {
     // Zadnje vrijeme izvršavanja.
     private long lastTime = -1;
     
+    // Rezultat zadnjeg izvršavanja.
+    private Integer lastResult = null;
+    
     // Pomoćna polja za rekonstrukciju najmanjeg puta.
     protected int[] minDist, parent;
     
@@ -27,12 +30,13 @@ public abstract class GraphAlgorithm {
      * @return najmanja udaljenost između vrhova start i end
      */
     public Integer query(int start, int end) {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         Integer ret = runAlgorithm(start, end);
-        long endTime = System.currentTimeMillis();
+        long endTime = System.nanoTime();
         lastTime = endTime - startTime;
         lStart = start;
         lEnd = end;
+        lastResult = ret;
         return ret;
     }
     
@@ -42,6 +46,13 @@ public abstract class GraphAlgorithm {
      */
     public long getLastTime() {
         return lastTime;
+    }
+    
+    /**
+     * Vraća rezultat zadnjeg izvršavanja. 
+     */
+    public Integer getLastResult() {
+        return lastResult;
     }
     
     /**

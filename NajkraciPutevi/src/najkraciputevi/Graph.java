@@ -143,6 +143,7 @@ public class Graph {
     public static Graph randomGraph(int n, boolean directed, double density, int maxWeight) {
         Random rand = new Random();
         Graph ret = new Graph(n);
+        density /= n;
         for (int i = 0; i < n; ++i) {
             for (int j = (directed) ? 0 : i+1; j < n; ++j) {
                 if (i == j) continue; // Ne dozvoljavamo petlje.
@@ -168,7 +169,7 @@ public class Graph {
      * 
      * @param n broj vrhova u grafu
      * @param directed je li graf usmjeren
-     * @param density koliko su bridovi česti u grafu, 1.0 znači da postoji
+     * @param density koliko svaki vrh prosjećno ima susjeda, n znači da postoji
      *                brid između svaka dva vrha
      * @return random generirani graf
      */
@@ -185,7 +186,7 @@ public class Graph {
      */
     public static Graph randomGraph(int n, boolean directed) {
         // Parametar je ovako izabran da bi odprilike svaki vrh imao 3 susjeda.
-        return randomGraph(n, directed, 3. / n);
+        return randomGraph(n, directed, 3.);
     }
     
     /**

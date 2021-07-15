@@ -115,9 +115,9 @@ public class GraphTest {
         System.out.println(instance);
         instance = Graph.randomGraph(8, true);
         System.out.println(instance);
-        instance = Graph.randomGraph(8, true, 0.8);
+        instance = Graph.randomGraph(8, true, 5.0);
         System.out.println(instance);
-        instance = Graph.randomGraph(8, true, 0.8, 1000);
+        instance = Graph.randomGraph(8, true, 5.0, 1000);
         System.out.println(instance);
     }
 }
