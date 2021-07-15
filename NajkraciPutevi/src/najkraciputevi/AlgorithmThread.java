@@ -2,11 +2,14 @@
  *dretva koja izvodi algoritam
  */
 package najkraciputevi;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 
 /**
- *
- * @author helena
+ * dretva za izvođenje algoritma - nakon izvođenja algoritma, sprema rezultat u bazu
+ * 
  */
 public class AlgorithmThread extends SwingWorker<Integer, Void>{
    
@@ -35,7 +38,13 @@ public class AlgorithmThread extends SwingWorker<Integer, Void>{
     
     protected void done()
     {
-        
+        try {
+            int res = get();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(AlgorithmThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(AlgorithmThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override protected void process()
