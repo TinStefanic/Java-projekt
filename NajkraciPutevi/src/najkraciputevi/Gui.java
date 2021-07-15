@@ -88,7 +88,7 @@ public class Gui extends javax.swing.JFrame {
         startver = new javax.swing.JTextField();
         endver = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         brojvrhovalabel.setText("Broj vrhova");
 
@@ -555,18 +555,22 @@ public class Gui extends javax.swing.JFrame {
             if (bellford.isSelected()) {
                 var bfa = new BellmanFordAlgorithm(graph);
                 var at1 = new AlgorithmThread(bfa,db,id,start,end,bellfordtb);
+                at1.execute();
             }
             if (dijk.isSelected()) {
                 var dj = new DijkstraAlgorithm(graph);
                 var at2 = new AlgorithmThread(dj,db,id,start,end,dijktb);
+                at2.execute();
             }
             if (floyd.isSelected()) {
                 var fl = new FloydWarshallAlgorithm(graph);
                 var at3 = new AlgorithmThread(fl,db,id,start,end,floydtb);
+                at3.execute();
             }
             if (nonat.isSelected()) {
                 var nn = new GraphAlgorithmTestOnly(graph);
                 var at4 = new AlgorithmThread(nn,db,id,start,end,nonattb);
+                at4.execute();
             }
         } catch (NumberFormatException nfe) {
             //what if it's not a num?

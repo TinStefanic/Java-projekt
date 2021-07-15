@@ -10,6 +10,7 @@ package najkraciputevi;
 
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
+import org.graphstream.ui.view.Viewer;
 /**
  * crtanje zadanog grafa (koristeći biblioteku graphstream)
  * @param g - graf koji se crta
@@ -25,8 +26,7 @@ public class DrawGraph {
     }
     public void draw() 
     {
-        System.setProperty("org.graphstream.ui", "swing");
-		
+        System.setProperty("org.graphstream.ui", "swing");	
 	org.graphstream.graph.Graph graph = new SingleGraph("Graph");
         for(int i = 0; i < g.getN(); ++i)
            graph.addNode(Integer.toString(i)).setAttribute("label", Integer.toString(i));
@@ -44,6 +44,7 @@ public class DrawGraph {
         graph.edges().forEach(e -> e.setAttribute("label", "" + (int) e.getNumber("length")));
         graph.edges().forEach(e -> e.setAttribute("ui.style", "text-color: darkred; text-size: 13; fill-color: darkgrey; size:1.5;"));
                 
-        graph.display();
+        Viewer viewer = graph.display();
+        viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
 	}
 }

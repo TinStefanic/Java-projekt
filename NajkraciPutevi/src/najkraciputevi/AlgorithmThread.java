@@ -45,9 +45,7 @@ public class AlgorithmThread extends SwingWorker<Integer, Void>{
     {
         try {
             int res = get();
-            System.out.println(extime);
-            System.out.println(exresult);
-            textbox.append(String.valueOf(extime)+"\r\n"+String.valueOf(exresult));
+            textbox.append(String.valueOf(extime)+" ns\r\nCijena najkraćeg puta je: "+String.valueOf(exresult));
         } catch (InterruptedException ex) {
             Logger.getLogger(AlgorithmThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
