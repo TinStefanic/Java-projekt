@@ -32,7 +32,7 @@ public class AlgorithmThread extends SwingWorker<Integer, Void>{
     {
         int result = alg.query(start, end);
         long time = alg.getLastTime();
-        db.insertCompletedAlgorithm( graph_id, alg.getName(), time, result );
+        db.insertCompletedAlgorithm( graph_id, alg.getName(), time, result, start, end );
         return result;
     }
     

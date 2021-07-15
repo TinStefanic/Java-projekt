@@ -21,8 +21,9 @@ import java.util.logging.Logger;
 /* baza se satoji od sljedećih tablica
  * graph - id, num_of_v
  * edge - id, graph_id, start, end, weight
- * algorithm - name, can_weights_be_negative
+ * algorithm - name, can_weights_be_negative //mozda netreba
  * completed_algorithm - id, graph_id, algorithm_name, duration, result
+ * shortest_path_edge - id, graph_id, alg_name, start, end, weight, order - pamti bridove za najkraci put u grafu po algoritmu
 */
 
 public final class Database {
@@ -113,7 +114,9 @@ public final class Database {
         String sql = " CREATE TABLE IF NOT EXISTS completed_algorithm (\n"+ 
           " id integer PRIMARY KEY ,\n"
           + " graph_id integer NOT NULL ,\n" 
-          + " alg_name text NOT NULL ,\n" 
+          + " alg_name text NOT NULL ,\n"
+          + " start int NOT NULL ,\n"
+          + " end int NOT NULL, \n" 
           + " duration int NOT NULL, \n"
           + " result int NOT NULL);";
         try ( 
@@ -126,16 +129,16 @@ public final class Database {
         }
     }
     
-    public void createShortestPathTable()
+    public void createShortestPathEdgeTable()
     {
-        String sql = " CREATE TABLE IF NOT EXISTS shortest_path (\n"+ 
+        String sql = " CREATE TABLE IF NOT EXISTS shortest_path_edge (\n"+ 
           " id integer PRIMARY KEY ,\n"
           + " graph_id integer NOT NULL ,\n" 
           + " alg_name text NOT NULL ,\n" 
           + " start int NOT NULL, \n"
           + " end int NOT NULL, \n"
           + " weight int NOT NULL, \n"
-          + " order int NOT NULL);";
+          + " pos int NOT NULL);";
         try ( 
              Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
@@ -167,7 +170,8 @@ public final class Database {
        
         for( int i = 0; i < G.getN(); ++i ){
             for( int j = 0; j <  G.getN(); ++j){
-                insertEdge(id, i, j, G.getWeightBetween(i, j));
+                if(G.getWeightBetween(i, j)!= null  )
+                    insertEdge(id, i, j, G.getWeightBetween(i, j));
             }
         }
         
@@ -194,10 +198,10 @@ public final class Database {
         catch ( SQLException e ) { }
     }
     
-    public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result)
+    public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result, int start, int end)
     {
         int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
-        String sql = " INSERT INTO completed_algorithm (id, graph_id , alg_name , duration, result ) "
+        String sql = " INSERT INTO completed_algorithm (id, graph_id , alg_name , start, end, duration, result ) "
                 + "VALUES (? ,? ,? ,? ,?)" ;
         
         try {
@@ -207,16 +211,44 @@ public final class Database {
             pstmt.setInt(1 , id );
             pstmt.setInt(2 , graph_id );
             pstmt.setString(3 , alg_name );
-            pstmt.setLong(4 , time );
-            pstmt.setInt(5 , result );
+            pstmt.setInt(4 , start );
+            pstmt.setInt(5 , end );
+            pstmt.setLong(6 , time );
+            pstmt.setInt(7, result );
             pstmt.executeUpdate ();
              }
         catch ( SQLException e ) { }
     }
     
-    public void insertShortestPath()
+    public void insertShortestPath( ShortestPath sp, int graph_id, String alg_name) //modificiraj
+    {   
+        int i = 1;
+        for(Edge edge: sp.getEdges()){
+            insertShortestPathEdge(edge, i, graph_id, alg_name);
+            ++i;
+        }
+    }
+    
+    public void insertShortestPathEdge(Edge edge, int pos, int graph_id, String alg_name) //modificiraj
     {
-        //todo
+        int id = rowCount("completed_algorithm") + 1;
+        String sql = " INSERT INTO shortest_path_edge (id, graph_id , alg_name , start, end, weight, pos ) "
+                + "VALUES (? ,? ,? ,? ,? ,? ,?)" ;
+        try {
+            Connection conn = DriverManager.getConnection( url );
+            PreparedStatement pstmt = conn.prepareStatement ( sql );
+            
+            pstmt.setInt(1 , id );
+            pstmt.setInt(2 , graph_id );
+            pstmt.setString(3 , alg_name );
+            pstmt.setInt(4 , edge.getStart() );
+            pstmt.setInt(5 , edge.getEnd() );
+            pstmt.setInt(6, edge.getWeight());
+            pstmt.setInt(7, pos);
+            pstmt.executeUpdate ();
+             }
+        catch ( SQLException e ) { }
+        
     }
     
     public Graph selectGraphById( int id )
@@ -282,7 +314,9 @@ public final class Database {
                String name = rs.getString("alg_name");
                double time = rs.getLong("duration");
                int result = rs.getInt("result");
-               alg.add(new CompletedAlgorithm(name, time, result));
+               int start = rs.getInt("start");
+               int end = rs.getInt("end");
+               alg.add(new CompletedAlgorithm(name, time, result, start, end));
             }
         } 
         catch ( SQLException e ) {
@@ -291,6 +325,38 @@ public final class Database {
         
         return alg;
     }
+    
+    public ShortestPath selectShortestPathByGraphAndAlg(int graph_id, String alg_name)
+    {
+        String sql = " SELECT * FROM shortest_path_edge"
+                + "WHERE graph_id = ? AND alg_name = ? ORDER BY pos asc";
+        ArrayList<Edge> edges = new ArrayList<Edge>();
+        
+        try {
+            Connection conn = DriverManager.getConnection( url );
+            PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt.setInt( 1, graph_id );
+            pstmt.setString(2, alg_name);
+            
+            ResultSet rs = pstmt.executeQuery( sql );
+            while ( rs.next() ) {
+               int start = rs.getInt("start");
+               int end = rs.getInt("end");
+               int weight = rs.getInt("weight");
+               edges.add(new Edge(start, end, weight));
+            }
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage () ) ;
+        }
+        
+        ShortestPath sp = new ShortestPath(edges.get(0).getStart(), edges.get(edges.size()-1).getEnd());
+        for(Edge edge: edges)
+            sp.addEdge(edge.getStart(), edge.getEnd(), edge.getWeight());
+        return sp;
+        
+    }
+   
     
    /* public String selectAlgNameByAlgId(int id)
     {
