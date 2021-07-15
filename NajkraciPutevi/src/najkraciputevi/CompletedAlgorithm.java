@@ -11,10 +11,9 @@ package najkraciputevi;
  * @param - vrijeme izvršavanja
 */
 
-
 public class CompletedAlgorithm {
-   
-    private String name;
+    
+        private String name;
     private double time;
     private int result;
     
@@ -39,5 +38,5 @@ public class CompletedAlgorithm {
     {
         return this.result;
     }
-   
+    
 }
