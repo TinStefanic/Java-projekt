@@ -2,12 +2,13 @@
  *dretva koja izvodi algoritam
  */
 package najkraciputevi;
+import javax.swing.SwingWorker;
 
 /**
  *
  * @author helena
  */
-public class AlgorithmThread implements Runnable{
+public class AlgorithmThread extends SwingWorker<Integer, Void>{
    
     int graph_id;
     Database db;
@@ -24,12 +25,21 @@ public class AlgorithmThread implements Runnable{
         end = e;
     }
     
-    @Override
-    public void run()
+    @Override protected Integer doInBackground () throws Exception 
     {
         int result = alg.query(start, end);
-        double time = alg.getLastTime();
+        long time = alg.getLastTime();
         db.insertCompletedAlgorithm( graph_id, alg.getName(), time, result );
+        return result;
+    }
+    
+    protected void done()
+    {
+        
+    }
+    
+    @Override protected void process()
+    {
         
     }
 }

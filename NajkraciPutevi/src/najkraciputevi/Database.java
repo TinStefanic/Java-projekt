@@ -76,7 +76,7 @@ public final class Database {
         }
     }
     
-    public void createAlgorithmTable()
+    public void createAlgorithmTable() // možda nepotrebno
     {
         String sql = " CREATE TABLE IF NOT EXISTS algorithm (\n"+ 
           " name text PRIMARY KEY ,\n" 
@@ -114,8 +114,8 @@ public final class Database {
           " id integer PRIMARY KEY ,\n"
           + " graph_id integer NOT NULL ,\n" 
           + " alg_name text NOT NULL ,\n" 
-          + " duration real NOT NULL, \n"
-          + " result integer NOT NULL);";
+          + " duration int NOT NULL, \n"
+          + " result int NOT NULL);";
         try ( 
              Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
@@ -126,7 +126,27 @@ public final class Database {
         }
     }
     
-    public void insertAlgorithms()
+    public void createShortestPathTable()
+    {
+        String sql = " CREATE TABLE IF NOT EXISTS shortest_path (\n"+ 
+          " id integer PRIMARY KEY ,\n"
+          + " graph_id integer NOT NULL ,\n" 
+          + " alg_name text NOT NULL ,\n" 
+          + " start int NOT NULL, \n"
+          + " end int NOT NULL, \n"
+          + " weight int NOT NULL, \n"
+          + " order int NOT NULL);";
+        try ( 
+             Connection conn = DriverManager.getConnection( url );
+             Statement stmt = conn.createStatement() ) {
+             if ( conn != null ) { stmt.execute( sql ) ;}
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage() ) ; 
+        }
+    }
+    
+    public void insertAlgorithms(String name, int neg) //možda nepotreno
     {
         
     }
@@ -174,7 +194,7 @@ public final class Database {
         catch ( SQLException e ) { }
     }
     
-    public void insertCompletedAlgorithm( int graph_id, String alg_name, double time, int result)
+    public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result)
     {
         int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
         String sql = " INSERT INTO completed_algorithm (id, graph_id , alg_name , duration, result ) "
@@ -187,11 +207,16 @@ public final class Database {
             pstmt.setInt(1 , id );
             pstmt.setInt(2 , graph_id );
             pstmt.setString(3 , alg_name );
-            pstmt.setDouble(4 , time );
+            pstmt.setLong(4 , time );
             pstmt.setInt(5 , result );
             pstmt.executeUpdate ();
              }
         catch ( SQLException e ) { }
+    }
+    
+    public void insertShortestPath()
+    {
+        //todo
     }
     
     public Graph selectGraphById( int id )
@@ -255,7 +280,7 @@ public final class Database {
             ResultSet rs = pstmt.executeQuery( sql );
             while ( rs.next() ) {
                String name = rs.getString("alg_name");
-               double time = rs.getDouble("duration");
+               double time = rs.getLong("duration");
                int result = rs.getInt("result");
                alg.add(new CompletedAlgorithm(name, time, result));
             }

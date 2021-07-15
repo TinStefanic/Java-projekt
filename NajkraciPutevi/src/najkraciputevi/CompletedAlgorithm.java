@@ -8,12 +8,13 @@ package najkraciputevi;
 /*
  * izvršeni algoritam
  * @param name - ime algoritma
- * @param - vrijeme izvršavanja
+ * @param time - vrijeme izvršavanja
+   @param result - duljina najkraćeg puta koji je alg našao
 */
 
 public class CompletedAlgorithm {
     
-        private String name;
+    private String name;
     private double time;
     private int result;
     
@@ -21,22 +22,22 @@ public class CompletedAlgorithm {
     {
         this.time = time;
         this.name = name;
-        this.result=result;
+        this.result = result;
     }
     
     public String getName()
     {
-        return this.name;
+        return name;
     }
     
     public double getTime()
     {
-        return this.time;
+        return time;
     }
     
     public int getResult()
     {
-        return this.result;
+        return result;
     }
     
 }
