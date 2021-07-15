@@ -15,18 +15,27 @@ package najkraciputevi;
 public class CompletedAlgorithm {
     
     private String name;
-    private double time;
+    private long time;
     private int result;
     private int start;
     private int end;
     
-    public CompletedAlgorithm(String name, double time, int result, int start, int end)
+    public CompletedAlgorithm(String name, long time, int result, int start, int end)
     {
         this.time = time;
         this.name = name;
         this.result = result;
         this.start = start;
         this.end = end;
+    }
+    
+    public CompletedAlgorithm()
+    {
+        name = "";
+        time = -1;
+        result = -1;
+        start = -1;
+        end = -1;
     }
     
     public String getName()

@@ -65,9 +65,9 @@ public final class Database {
     public void createGraphTable()
     {
         
-        String sql = " CREATE TABLE IF NOT EXISTS graph (\n"+ 
-          " graph_id integer PRIMARY KEY ,\n"
-          + " num_of_v integer NOT NULL" + ");";
+        String sql = "CREATE TABLE IF NOT EXISTS graph (\n"+ 
+          " graph_id integer PRIMARY KEY,\n"
+          + " num_of_v integer NOT NULL\n" + ");";
         
         try ( Connection conn = DriverManager.getConnection( url );
         Statement stmt = conn.createStatement() ) {
@@ -94,12 +94,12 @@ public final class Database {
     
     public void createEdgeTable()
     {
-        String sql = " CREATE TABLE IF NOT EXISTS edge (\n"+ 
-          " id integer PRIMARY KEY ,\n"
-          + " graph_id integer NOT NULL ,\n"
-          + " start integer NOT NULL ,\n" 
-          + " end integer NOT NULL ,\n" 
-          + " weight integer NOT NULL" + ");";
+        String sql = "CREATE TABLE IF NOT EXISTS edge (\n"+ 
+          " id integer PRIMARY KEY,\n"
+          + " graph_id integer NOT NULL,\n"
+          + " start integer NOT NULL,\n" 
+          + " end integer NOT NULL,\n" 
+          + " weight integer NOT NULL\n" + ");";
         try ( 
              
              Connection conn = DriverManager.getConnection( url );
@@ -113,14 +113,14 @@ public final class Database {
     
     public void createCompletedAlgorithmTable()
     {
-        String sql = " CREATE TABLE IF NOT EXISTS completed_algorithm (\n"+ 
-          " id integer PRIMARY KEY ,\n"
-          + " graph_id integer NOT NULL ,\n" 
-          + " alg_name text NOT NULL ,\n"
-          + " start int NOT NULL ,\n"
-          + " end int NOT NULL, \n" 
-          + " duration int NOT NULL, \n"
-          + " result int NOT NULL);";
+        String sql = "CREATE TABLE IF NOT EXISTS completed_algorithm (\n"+ 
+          " id integer PRIMARY KEY,\n"
+          + " graph_id integer NOT NULL,\n" 
+          + " alg_name text NOT NULL,\n"
+          + " start int NOT NULL,\n"
+          + " end int NOT NULL,\n" 
+          + " duration int NOT NULL,\n"
+          + " result int NOT NULL\n);";
         try ( 
              Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
@@ -133,14 +133,14 @@ public final class Database {
     
     public void createShortestPathEdgeTable()
     {
-        String sql = " CREATE TABLE IF NOT EXISTS shortest_path_edge (\n"+ 
-          " id integer PRIMARY KEY ,\n"
-          + " graph_id integer NOT NULL ,\n" 
-          + " alg_name text NOT NULL ,\n" 
-          + " start int NOT NULL, \n"
-          + " end int NOT NULL, \n"
-          + " weight int NOT NULL, \n"
-          + " pos int NOT NULL);";
+        String sql = "CREATE TABLE IF NOT EXISTS shortest_path_edge (\n"+ 
+          " id integer PRIMARY KEY,\n"
+          + " graph_id integer NOT NULL,\n" 
+          + " alg_name text NOT NULL,\n" 
+          + " start int NOT NULL,\n"
+          + " end int NOT NULL,\n"
+          + " weight int NOT NULL,\n"
+          + " pos int NOT NULL\n);";
         try ( 
              Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
@@ -155,8 +155,8 @@ public final class Database {
     public int insertGraph( Graph G ) //vraca id grafa
     {
         int id = rowCount("graph") + 1; // odredi id
-        String sql = " INSERT INTO graph (id, num_of_v ) "
-                + "VALUES (? ,?)" ;
+        String sql = "INSERT INTO graph(id,num_of_v) "
+                + "VALUES(?,?)" ;
         try {
             Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
@@ -179,8 +179,8 @@ public final class Database {
     public void insertEdge( int graph_id, int start, int end, int weight )
     {
        // int id = rowCount("edge") + 1; // odrediti id (row count + 1)
-        String sql = " INSERT INTO edge (graph_id , start , end, weight ) "
-                + "VALUES (? ,? ,? ,?)" ;
+        String sql = "INSERT INTO edge(graph_id,start,end,weight) "
+                + "VALUES(?,?,?,?)" ;
         
         try {
             Connection conn = DriverManager.getConnection( url );
@@ -199,8 +199,8 @@ public final class Database {
     public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result, int start, int end)
     {
         //int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
-        String sql = " INSERT INTO completed_algorithm (graph_id , alg_name , start, end, duration, result ) "
-                + "VALUES (? ,? ,? ,? ,? ,?)" ;
+        String sql = "INSERT INTO completed_algorithm(graph_id,alg_name,start,end,duration,result) "
+                + "VALUES(?,?,?,?,?,?)" ;
         
         try {
             Connection conn = DriverManager.getConnection( url );
@@ -230,8 +230,8 @@ public final class Database {
     public void insertShortestPathEdge(Edge edge, int pos, int graph_id, String alg_name) //modificiraj
     {
         //int id = rowCount("completed_algorithm") + 1;
-        String sql = " INSERT INTO shortest_path_edge (graph_id , alg_name , start, end, weight, pos ) "
-                + "VALUES (? ,? ,? ,? ,? ,?)" ;
+        String sql = "INSERT INTO shortest_path_edge(graph_id,alg_name,start,end,weight,pos)"
+                + "VALUES(?,?,?,?,?,?)" ;
         try {
             Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
@@ -251,8 +251,8 @@ public final class Database {
     
     public Graph selectGraphById( int id )
     {
-        String sql = " SELECT num_of_v FROM graph "
-                + "WHERE graph_id = ? ";
+        String sql = "SELECT num_of_v FROM graph "
+                + "WHERE graph_id = ?";
         try {
             Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement( sql );
@@ -278,8 +278,8 @@ public final class Database {
     
     public ArrayList<Edge> selectEdgesByGraphId(int id)
     {
-        String sql = " SELECT start, end, weight FROM edge "
-                + "WHERE graph_id = ? ";
+        String sql = "SELECT start, end, weight FROM edge "
+                + "WHERE graph_id = ?";
         ArrayList<Edge> edges = new ArrayList<Edge>();
         try {
             Connection conn = DriverManager.getConnection( url );
@@ -300,8 +300,8 @@ public final class Database {
     public ArrayList<CompletedAlgorithm> selectCompletedAlgorithmsByGraphId( int id )
     {
         ArrayList<CompletedAlgorithm> alg = new ArrayList<CompletedAlgorithm>();
-        String sql = " SELECT graph_id , alg_name , duration, result FROM completed_algorithm "
-                + "WHERE graph_id = ? ";
+        String sql = "SELECT graph_id, alg_name, duration, result FROM completed_algorithm "
+                + "WHERE graph_id = ?";
         try {
             Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement( sql );
@@ -310,7 +310,7 @@ public final class Database {
             ResultSet rs = pstmt.executeQuery( sql );
             while ( rs.next() ) {
                String name = rs.getString("alg_name");
-               double time = rs.getLong("duration");
+               long time = rs.getLong("duration");
                int result = rs.getInt("result");
                int start = rs.getInt("start");
                int end = rs.getInt("end");
@@ -324,10 +324,10 @@ public final class Database {
         return alg;
     }
     
-    public CompletedAlgorithm selectCompletedAlgorithByGraphIdandAlgName( int id, String alg_name)
+    public CompletedAlgorithm selectCompletedAlgorithmByGraphIdandAlgName( int id, String alg_name)
     {
         CompletedAlgorithm alg = new CompletedAlgorithm();
-        String sql = " SELECT graph_id , alg_name , duration, result FROM completed_algorithm "
+        String sql = "SELECT graph_id, alg_name, duration, result FROM completed_algorithm "
                 + "WHERE graph_id = ? AND alg_name = ?";
         try {
             Connection conn = DriverManager.getConnection( url );
@@ -355,7 +355,7 @@ public final class Database {
     
     public ShortestPath selectShortestPathByGraphAndAlg(int graph_id, String alg_name)
     {
-        String sql = " SELECT * FROM shortest_path_edge "
+        String sql = "SELECT * FROM shortest_path_edge "
                 + "WHERE graph_id = ? AND alg_name = ? ORDER BY pos ASC";
         ArrayList<Edge> edges = new ArrayList<Edge>();
         
@@ -387,7 +387,7 @@ public final class Database {
     
     public int rowCount( String column)
     {
-        String sql = " SELECT count(*) FROM " + column + ";";
+        String sql = "SELECT count(*) FROM " + column + ";";
         int count = 0;
         try {
             Connection conn = DriverManager.getConnection( url );
