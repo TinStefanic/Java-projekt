@@ -1,4 +1,4 @@
 EXPORTS
-    Java_najkraciputevi_DijkstraAlgorithm_runAlgorithmNative @1
-    Java_najkraciputevi_FloydWarshallAlgorithm_runAlgorithmNative @2
-    _Z59Java_najkraciputevi_BellmanFordAlgorithm_runAlgorithmNativeP7JNIEnv_P8_jobjectll @3
+    Java_najkraciputevi_BellmanFordAlgorithm_runAlgorithmNative @1
+    Java_najkraciputevi_DijkstraAlgorithm_runAlgorithmNative @2
+    Java_najkraciputevi_FloydWarshallAlgorithm_runAlgorithmNative @3

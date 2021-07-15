@@ -48,15 +48,15 @@ public class DijkstraAlgorithmTest {
         DijkstraAlgorithm instance = new DijkstraAlgorithm(g);
         assertEquals(null, instance.getShortestPath());
         instance.query(0, 1);
-        assertEquals("0->1", instance.getShortestPath().toString());
+        assertEquals("0-(1)->1", instance.getShortestPath().toString());
         instance.query(1, 2);
-        assertEquals("1->2", instance.getShortestPath().toString());
+        assertEquals("1-(3)->2", instance.getShortestPath().toString());
         instance.query(2, 3);
-        assertEquals("2->3", instance.getShortestPath().toString());
+        assertEquals("2-(5)->3", instance.getShortestPath().toString());
         instance.query(0, 5);
         assertEquals(null, instance.getShortestPath());
         instance.query(0, 4);
-        assertEquals("0->2->3->4", instance.getShortestPath().toString());
+        assertEquals("0-(2)->2-(5)->3-(3)->4", instance.getShortestPath().toString());
     }
     
 }
