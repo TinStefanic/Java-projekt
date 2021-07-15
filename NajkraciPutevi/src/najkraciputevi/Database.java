@@ -57,6 +57,7 @@ public final class Database {
         createAlgorithmTable();
         createEdgeTable();
         createCompletedAlgorithmTable();
+        createShortestPathEdgeTable();
         
         //this.insertAlgorithms();
     }
@@ -84,7 +85,7 @@ public final class Database {
           + "neg_weights integer NOT NULL ,\n" + ");";
         try ( Connection conn = DriverManager.getConnection( url );
         Statement stmt = conn.createStatement() ) {
-            if ( conn != null ) { stmt . execute ( sql ) ;}
+            if ( conn != null ) { stmt.execute ( sql ) ;}
         } 
         catch ( SQLException e ) {
             System.out.println( e.getMessage() ) ; 
