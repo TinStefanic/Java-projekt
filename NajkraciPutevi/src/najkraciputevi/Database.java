@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 public final class Database {
     
     String databaseName = "najkraciPutevi.db";
-    String url = " jdbc:sqlite:" + databaseName ;
+    String url = "jdbc:sqlite:" + databaseName ;
     
     /* konstruktor stvara bazu i tablice (ako ne postoje) te
      * popuni tablicu algorithm
