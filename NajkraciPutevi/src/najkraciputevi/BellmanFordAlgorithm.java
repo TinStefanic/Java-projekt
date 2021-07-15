@@ -1,10 +1,7 @@
 package najkraciputevi;
 
-/**
- * Dijkstrin algoritam za traženje najkraćeg puta u grafu.
- */
-public class DijkstraAlgorithm extends GraphAlgorithm {
-    public DijkstraAlgorithm(Graph g) {
+public class BellmanFordAlgorithm extends GraphAlgorithm {
+    public BellmanFordAlgorithm(Graph g) {
         super(g);
         parent = new int[g.getN()];
     }
@@ -12,13 +9,13 @@ public class DijkstraAlgorithm extends GraphAlgorithm {
     @Override
     protected Integer runAlgorithm(int start, int end) {
         int ret = runAlgorithmNative(start, end);
-        if (ret == -1) return null;
+        if (ret == Integer.MAX_VALUE) return null;
         else return (Integer)ret;
     }
     
     @Override
     public String getName() {
-        return "Dijkstra";
+        return "BellmanFord";
     }
     
     @Override

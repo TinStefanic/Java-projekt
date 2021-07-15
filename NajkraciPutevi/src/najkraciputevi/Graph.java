@@ -146,10 +146,17 @@ public class Graph {
         for (int i = 0; i < n; ++i) {
             for (int j = (directed) ? 0 : i+1; j < n; ++j) {
                 if (i == j) continue; // Ne dozvoljavamo petlje.
+                // Brid je već dodan.
+                if (ret.getWeightBetween(j, i) != null) continue;
                 if (rand.nextDouble() < density) {
                     int w = rand.nextInt(maxWeight)+1;
-                    ret.addEdge(j, i, w);
-                    if (!directed) ret.addEdge(i, j, w);
+                    if (directed) {
+                        if (rand.nextBoolean()) ret.addEdge(i, j, w);
+                        else ret.addEdge(j, i, w);
+                    } else {
+                        ret.addEdge(i, j, w);
+                        ret.addEdge(j, i, w);
+                    }
                 }
             }
         }
