@@ -73,4 +73,12 @@ public class ShortestPath {
     {
         return edges;
     }
+    
+    @Override public String toString()
+    {
+        String ret = Integer.toString(edges.get(0).getStart());
+        for(Edge edge: edges)
+            ret += "-(" + Integer.toString(edge.getWeight()) + ")->" + Integer.toString(edge.getEnd());
+        return ret;
+    }
 }
