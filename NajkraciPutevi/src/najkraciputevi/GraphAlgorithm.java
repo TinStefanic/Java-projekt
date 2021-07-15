@@ -27,9 +27,9 @@ public abstract class GraphAlgorithm {
      * @return najmanja udaljenost između vrhova start i end
      */
     public Integer query(int start, int end) {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         Integer ret = runAlgorithm(start, end);
-        long endTime = System.currentTimeMillis();
+        long endTime = System.nanoTime();
         lastTime = endTime - startTime;
         lStart = start;
         lEnd = end;
