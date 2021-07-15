@@ -87,7 +87,7 @@ public class BarChart {
     public void display()
     {
         makeChart();
-        JFrame f = new JFrame("BarChart");
+        JFrame f = new JFrame("Time comparison");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(new ChartPanel(chart));
         f.pack();
