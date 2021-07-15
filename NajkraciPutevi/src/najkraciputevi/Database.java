@@ -66,8 +66,8 @@ public final class Database {
     {
         
         String sql = " CREATE TABLE IF NOT EXISTS graph (\n"+ 
-          " id integer PRIMARY KEY ,\n"
-          + " num_of_v integer NOT NULL ,\n" + ");";
+          " graph_id integer PRIMARY KEY ,\n"
+          + " num_of_v integer NOT NULL" + ");";
         
         try ( Connection conn = DriverManager.getConnection( url );
         Statement stmt = conn.createStatement() ) {
@@ -82,7 +82,7 @@ public final class Database {
     {
         String sql = " CREATE TABLE IF NOT EXISTS algorithm (\n"+ 
           " name text PRIMARY KEY ,\n" 
-          + "neg_weights integer NOT NULL ,\n" + ");";
+          + "neg_weights integer NOT NULL" + ");";
         try ( Connection conn = DriverManager.getConnection( url );
         Statement stmt = conn.createStatement() ) {
             if ( conn != null ) { stmt.execute ( sql ) ;}
@@ -96,6 +96,7 @@ public final class Database {
     {
         String sql = " CREATE TABLE IF NOT EXISTS edge (\n"+ 
           " id integer PRIMARY KEY ,\n"
+          + " graph_id integer NOT NULL ,\n"
           + " start integer NOT NULL ,\n" 
           + " end integer NOT NULL ,\n" 
           + " weight integer NOT NULL" + ");";
@@ -250,7 +251,7 @@ public final class Database {
     
     public Graph selectGraphById( int id )
     {
-        String sql = " SELECT num_of_v FROM graph"
+        String sql = " SELECT num_of_v FROM graph "
                 + "WHERE graph_id = ? ";
         try {
             Connection conn = DriverManager.getConnection( url );
@@ -277,7 +278,7 @@ public final class Database {
     
     public ArrayList<Edge> selectEdgesByGraphId(int id)
     {
-        String sql = " SELECT start, end, weight FROM edge"
+        String sql = " SELECT start, end, weight FROM edge "
                 + "WHERE graph_id = ? ";
         ArrayList<Edge> edges = new ArrayList<Edge>();
         try {
@@ -299,7 +300,7 @@ public final class Database {
     public ArrayList<CompletedAlgorithm> selectCompletedAlgorithmsByGraphId( int id )
     {
         ArrayList<CompletedAlgorithm> alg = new ArrayList<CompletedAlgorithm>();
-        String sql = " SELECT graph_id , alg_name , duration, result FROM completed_algorithm"
+        String sql = " SELECT graph_id , alg_name , duration, result FROM completed_algorithm "
                 + "WHERE graph_id = ? ";
         try {
             Connection conn = DriverManager.getConnection( url );
@@ -325,7 +326,7 @@ public final class Database {
     
     public ShortestPath selectShortestPathByGraphAndAlg(int graph_id, String alg_name)
     {
-        String sql = " SELECT * FROM shortest_path_edge"
+        String sql = " SELECT * FROM shortest_path_edge "
                 + "WHERE graph_id = ? AND alg_name = ? ORDER BY pos ASC";
         ArrayList<Edge> edges = new ArrayList<Edge>();
         
@@ -357,7 +358,7 @@ public final class Database {
     
     public int rowCount( String column)
     {
-        String sql = " SELECT count(*) FROM " + column;
+        String sql = " SELECT count(*) FROM " + column + ";";
         int count = 0;
         try {
             Connection conn = DriverManager.getConnection( url );

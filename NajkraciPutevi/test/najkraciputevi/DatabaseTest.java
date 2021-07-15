@@ -31,18 +31,6 @@ public class DatabaseTest {
     }
 
     /**
-     * Test of createGraphTable method, of class Database.
-     */
-    @Test
-    public void testCreateGraphTable() {
-        System.out.println("createGraphTable");
-        Database instance = new Database();
-        instance.createGraphTable();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of createAlgorithmTable method, of class Database.
      */
     @Test
@@ -237,7 +225,7 @@ public class DatabaseTest {
     @Test
     public void testRowCount() {
         System.out.println("rowCount");
-        String column = "";
+        String column = "graph";
         Database instance = new Database();
         int expResult = 0;
         int result = instance.rowCount(column);
