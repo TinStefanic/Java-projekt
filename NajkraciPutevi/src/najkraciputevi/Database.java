@@ -149,10 +149,6 @@ public final class Database {
         }
     }
     
-    public void insertAlgorithms(String name, int neg) //možda nepotreno
-    {
-        
-    }
     
     public int insertGraph( Graph G ) //vraca id grafa
     {
@@ -180,19 +176,19 @@ public final class Database {
     
     public void insertEdge( int graph_id, int start, int end, int weight )
     {
-        int id = rowCount("edge") + 1; // odrediti id (row count + 1)
-        String sql = " INSERT INTO edge (id, graph_id , start , end, weight ) "
-                + "VALUES (? ,? ,? ,? ,?)" ;
+       // int id = rowCount("edge") + 1; // odrediti id (row count + 1)
+        String sql = " INSERT INTO edge (graph_id , start , end, weight ) "
+                + "VALUES (? ,? ,? ,?)" ;
         
         try {
             Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
             
-            pstmt.setInt(1 , id );
-            pstmt.setInt(2 , graph_id );
-            pstmt.setInt(3 , start );
-            pstmt.setInt(4 , end );
-            pstmt.setInt(5 , weight );
+           // pstmt.setInt(1 , id );
+            pstmt.setInt(1 , graph_id );
+            pstmt.setInt(2 , start );
+            pstmt.setInt(3 , end );
+            pstmt.setInt(4 , weight );
             pstmt.executeUpdate ();
              }
         catch ( SQLException e ) { }
@@ -200,21 +196,21 @@ public final class Database {
     
     public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result, int start, int end)
     {
-        int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
-        String sql = " INSERT INTO completed_algorithm (id, graph_id , alg_name , start, end, duration, result ) "
-                + "VALUES (? ,? ,? ,? ,?)" ;
+        //int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
+        String sql = " INSERT INTO completed_algorithm (graph_id , alg_name , start, end, duration, result ) "
+                + "VALUES (? ,? ,? ,? ,? ,?)" ;
         
         try {
             Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
             
-            pstmt.setInt(1 , id );
-            pstmt.setInt(2 , graph_id );
-            pstmt.setString(3 , alg_name );
-            pstmt.setInt(4 , start );
-            pstmt.setInt(5 , end );
-            pstmt.setLong(6 , time );
-            pstmt.setInt(7, result );
+           // pstmt.setInt(1 , id );
+            pstmt.setInt(1 , graph_id );
+            pstmt.setString(2 , alg_name );
+            pstmt.setInt(3 , start );
+            pstmt.setInt(4 , end );
+            pstmt.setLong(5 , time );
+            pstmt.setInt(6,  result );
             pstmt.executeUpdate ();
              }
         catch ( SQLException e ) { }
@@ -231,20 +227,20 @@ public final class Database {
     
     public void insertShortestPathEdge(Edge edge, int pos, int graph_id, String alg_name) //modificiraj
     {
-        int id = rowCount("completed_algorithm") + 1;
-        String sql = " INSERT INTO shortest_path_edge (id, graph_id , alg_name , start, end, weight, pos ) "
-                + "VALUES (? ,? ,? ,? ,? ,? ,?)" ;
+        //int id = rowCount("completed_algorithm") + 1;
+        String sql = " INSERT INTO shortest_path_edge (graph_id , alg_name , start, end, weight, pos ) "
+                + "VALUES (? ,? ,? ,? ,? ,?)" ;
         try {
             Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
             
-            pstmt.setInt(1 , id );
-            pstmt.setInt(2 , graph_id );
-            pstmt.setString(3 , alg_name );
-            pstmt.setInt(4 , edge.getStart() );
-            pstmt.setInt(5 , edge.getEnd() );
-            pstmt.setInt(6, edge.getWeight());
-            pstmt.setInt(7, pos);
+            //pstmt.setInt(1 , id );
+            pstmt.setInt(1 , graph_id );
+            pstmt.setString(2 , alg_name );
+            pstmt.setInt(3 , edge.getStart() );
+            pstmt.setInt(4 , edge.getEnd() );
+            pstmt.setInt(5, edge.getWeight());
+            pstmt.setInt(6, pos);
             pstmt.executeUpdate ();
              }
         catch ( SQLException e ) { }
@@ -329,7 +325,7 @@ public final class Database {
     public ShortestPath selectShortestPathByGraphAndAlg(int graph_id, String alg_name)
     {
         String sql = " SELECT * FROM shortest_path_edge"
-                + "WHERE graph_id = ? AND alg_name = ? ORDER BY pos asc";
+                + "WHERE graph_id = ? AND alg_name = ? ORDER BY pos ASC";
         ArrayList<Edge> edges = new ArrayList<Edge>();
         
         try {
@@ -357,27 +353,6 @@ public final class Database {
         
     }
    
-    
-   /* public String selectAlgNameByAlgId(int id)
-    {
-        String sql = " SELECT name FROM algorithm WHERE id=?";
-        String name;
-        try {
-            Connection conn = DriverManager.getConnection( url );
-            PreparedStatement pstmt = conn.prepareStatement( sql );
-            pstmt.setInt( 1, id );
-            
-            ResultSet rs = pstmt.executeQuery( sql );
-            rs.next();
-            name = rs.getString("name");
-            
-        } 
-        catch ( SQLException e ) {
-            System.out.println( e.getMessage () ) ;
-            name="";
-        }
-        return name;
-    }*/
     
     public int rowCount( String column)
     {
