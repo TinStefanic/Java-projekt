@@ -36,6 +36,11 @@ public class ShortestPath {
         return start;
     }
     
+    public int getEnd()
+    {
+        return end;
+    }
+    
     public void addEdge(int start, int end, int weight)
     {
         if(isComplete == false){
