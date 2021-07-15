@@ -39,12 +39,22 @@ public class ShortestPath {
     {
         if(isComplete == false){
             edges.add(new Edge(start, end, weight));
-            if(edges.get(edges.size()-1).getEnd() == end)
+            if(edges.get(edges.size()-1).getEnd() == this.end)
             {
                 isComplete = true;
                 calculateDistance();
             }
                 
+        }
+    }
+    
+    public void addEdgeFront(int start, int end, int weight) {
+        if (isComplete == false) {
+            edges.add(0, new Edge(start, end, weight));
+            if (edges.get(0).getStart() == this.start) {
+                isComplete = true;
+                calculateDistance();
+            }
         }
     }
     
