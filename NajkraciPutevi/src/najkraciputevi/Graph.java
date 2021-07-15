@@ -184,7 +184,8 @@ public class Graph {
      * @return random generirani graf
      */
     public static Graph randomGraph(int n, boolean directed) {
-        return randomGraph(n, directed, 0.2);
+        // Parametar je ovako izabran da bi odprilike svaki vrh imao 3 susjeda.
+        return randomGraph(n, directed, 3. / n);
     }
     
     /**
