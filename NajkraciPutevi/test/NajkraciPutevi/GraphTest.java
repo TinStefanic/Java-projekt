@@ -1,4 +1,4 @@
-package NajkraciPutevi;
+package najkraciputevi;
 
 import najkraciputevi.Graph;
 import org.junit.After;
