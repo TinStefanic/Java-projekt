@@ -40,6 +40,7 @@ public class AlgorithmThread extends SwingWorker<Integer, Void>{
             exresult = alg.getLastResult();
             extime = alg.getLastTime();
             db.insertCompletedAlgorithm( graph_id, alg.getName(), extime, exresult, start, end );
+            db.insertShortestPath(alg.getShortestPath(), graph_id, alg.getName());
             pathExists = true;
             return exresult;
         } else {
