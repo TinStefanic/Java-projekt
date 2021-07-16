@@ -131,6 +131,7 @@ public class Graph {
      */
     public static Graph randomGraph(int n, boolean directed, double density, int maxWeight) {
         Random rand = new Random();
+        if (n > 1000) n = 1000; // Maksimalni broj vrhova je 1000;
         Graph ret = new Graph(n);
         density /= n;
         for (int i = 0; i < n; ++i) {
