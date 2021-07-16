@@ -41,6 +41,8 @@ public class Gui extends javax.swing.JFrame {
 
         us_neus = new javax.swing.ButtonGroup();
         fileChooser = new javax.swing.JFileChooser();
+        krivibroj = new javax.swing.JDialog();
+        jLabel15 = new javax.swing.JLabel();
         vercnt = new javax.swing.JTextField();
         brojvrhovalabel = new javax.swing.JLabel();
         edgecombo = new javax.swing.JComboBox<>();
@@ -93,6 +95,28 @@ public class Gui extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         history = new javax.swing.JList<>();
         jLabel14 = new javax.swing.JLabel();
+
+        krivibroj.setBounds(new java.awt.Rectangle(200, 200, 435, 292));
+
+        jLabel15.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel15.setText("Broj vrhova mora biti između 1 i 1000!");
+
+        javax.swing.GroupLayout krivibrojLayout = new javax.swing.GroupLayout(krivibroj.getContentPane());
+        krivibroj.getContentPane().setLayout(krivibrojLayout);
+        krivibrojLayout.setHorizontalGroup(
+            krivibrojLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(krivibrojLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel15)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        krivibrojLayout.setVerticalGroup(
+            krivibrojLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(krivibrojLayout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -319,7 +343,7 @@ public class Gui extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(102, Short.MAX_VALUE))
+                        .addContainerGap(114, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -509,6 +533,10 @@ public class Gui extends javax.swing.JFrame {
         String text = vercnt.getText();
         try {
             vertexnumber=Integer.parseInt(text);
+            if (vertexnumber>1000) {
+                krivibroj.setVisible(true);
+                return;
+            }
             if (vertexnumber>50) {
                 nacrtaj.setEnabled(false);
                 bellfordbut.setEnabled(false);
@@ -548,6 +576,10 @@ public class Gui extends javax.swing.JFrame {
         String text3 = maxweight.getText();
         try {
             vertexnumber = Integer.parseInt(text);
+            if (vertexnumber>1000) {
+                krivibroj.setVisible(true);
+                return;
+            }
             if (vertexnumber>50) {
                 nacrtaj.setEnabled(false);
                 bellfordbut.setEnabled(false);
@@ -590,6 +622,10 @@ public class Gui extends javax.swing.JFrame {
             File file = fileChooser.getSelectedFile();
             try {
                 vertexnumber = Integer.parseInt(text);
+                if (vertexnumber>1000) {
+                    krivibroj.setVisible(true);
+                    return;
+                }
                 BufferedReader br = new BufferedReader(new FileReader(file)); 
                 String line;
                 int i=0;
@@ -815,6 +851,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -832,6 +869,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JDialog krivibroj;
     private javax.swing.JTextField maxweight;
     private javax.swing.JButton nacrtaj;
     private javax.swing.JRadioButton neusmjereniradio;
