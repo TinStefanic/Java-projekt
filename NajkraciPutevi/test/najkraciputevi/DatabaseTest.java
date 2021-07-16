@@ -5,17 +5,37 @@
  */
 package najkraciputevi;
 
+
 import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.sql.Connection ;
+import java.sql.DatabaseMetaData ;
+import java.sql.DriverManager ;
+import java.sql.SQLException ;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
- * @author thund
+ * 
  */
 public class DatabaseTest {
     
+    String databaseName = "najkraciPutevi.db";
+    String url = "jdbc:sqlite:" + databaseName ;
+    Connection conn;
+    
     public DatabaseTest() {
+        try {
+            this.conn = DriverManager.getConnection( url );
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -27,7 +47,7 @@ public class DatabaseTest {
         Database instance = new Database();
         instance.createTables();
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -39,7 +59,7 @@ public class DatabaseTest {
         Database instance = new Database();
         instance.createEdgeTable();
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -51,7 +71,7 @@ public class DatabaseTest {
         Database instance = new Database();
         instance.createCompletedAlgorithmTable();
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -63,7 +83,7 @@ public class DatabaseTest {
         Database instance = new Database();
         instance.createShortestPathEdgeTable();
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -72,13 +92,26 @@ public class DatabaseTest {
     @Test
     public void testInsertGraph() {
         System.out.println("insertGraph");
-        Graph G = null;
+        Graph G = new Graph(5);
         Database instance = new Database();
-        int expResult = 0;
-        int result = instance.insertGraph(G);
-        assertEquals(expResult, result);
+        int id = instance.insertGraph(G);
+        String sql = "SELECT num_of_v FROM graph "
+                + "WHERE graph_id = ?";
+        Graph g;
+        try{
+         PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt.setInt( 1, id );
+            ResultSet rs = pstmt.executeQuery( );
+            rs.next();
+            g = new Graph(rs.getInt("num_of_v"));
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage () ) ;
+            g = new Graph(0);
+        }
+        assertEquals(g.getN(), G.getN());
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -87,14 +120,38 @@ public class DatabaseTest {
     @Test
     public void testInsertEdge() {
         System.out.println("insertEdge");
-        int graph_id = 0;
-        int start = 0;
-        int end = 0;
-        int weight = 0;
+        int graph_id = 100;
+        int start = 1;
+        int end = 5;
+        int weight = 12;
         Database instance = new Database();
         instance.insertEdge(graph_id, start, end, weight);
+        
+        String sql = "SELECT * FROM edge "
+                + "WHERE graph_id = ? AND start = ? AND end = ? AND weight = ?";
+        Edge edge;
+        int id;
+        try{
+         PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt.setInt( 1, graph_id );
+            pstmt.setInt( 2, start );
+            pstmt.setInt( 3, end );
+            pstmt.setInt( 4, weight );
+            ResultSet rs = pstmt.executeQuery( );
+            rs.next();
+            edge = new Edge(rs.getInt("start"), rs.getInt("end"), rs.getInt("weight"));
+            id = rs.getInt("graph_id");
+            assertEquals(graph_id, id);
+            assertEquals(start, edge.getStart());
+            assertEquals(end, edge.getEnd());
+            assertEquals(weight, edge.getWeight() );
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage () ) ;
+        }
+        
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
@@ -121,13 +178,38 @@ public class DatabaseTest {
     @Test
     public void testInsertShortestPath() {
         System.out.println("insertShortestPath");
-        ShortestPath sp = null;
-        int graph_id = 0;
-        String alg_name = "";
+        ShortestPath sp = new ShortestPath(1,6);
+        sp.addEdge(1,3,5);
+        sp.addEdge(3,5,2);
+        sp.addEdge(5,6,1);
+        int graph_id = 90;
+        String alg_name = "FloydWarshall";
         Database instance = new Database();
         instance.insertShortestPath(sp, graph_id, alg_name);
+        String sql = "SELECT * FROM shortest_path_edge "
+                + "WHERE graph_id = ? AND alg_name = ? ORDER BY pos ASC";
+        ShortestPath new_sp = new ShortestPath(1,6);
+        try{
+         PreparedStatement pstmt = conn.prepareStatement( sql );
+            pstmt.setInt( 1, graph_id );
+            pstmt.setString( 2, alg_name);
+            ResultSet rs = pstmt.executeQuery( );
+            while(rs.next()){
+                new_sp.addEdge(rs.getInt("start"), rs.getInt("end"), rs.getInt("weight"));
+            }
+            assertEquals(sp.getDistance(), new_sp.getDistance());
+            assertEquals(sp.getEdges().size(), new_sp.getEdges().size());
+            assertEquals(sp.toString(), new_sp.toString());
+            
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage () ) ;
+        }
+        
+        
+        
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //fail("The test case is a prototype.");
     }
 
     /**
