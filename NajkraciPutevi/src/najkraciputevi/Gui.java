@@ -509,6 +509,19 @@ public class Gui extends javax.swing.JFrame {
         String text = vercnt.getText();
         try {
             vertexnumber=Integer.parseInt(text);
+            if (vertexnumber>50) {
+                nacrtaj.setEnabled(false);
+                bellfordbut.setEnabled(false);
+                dijkbut.setEnabled(false);
+                floydbut.setEnabled(false);
+                nonatbut.setEnabled(false);
+            } else {
+                nacrtaj.setEnabled(true);
+                bellfordbut.setEnabled(true);
+                dijkbut.setEnabled(true);
+                floydbut.setEnabled(true);
+                nonatbut.setEnabled(true);
+            }
             graph = new Graph(vertexnumber);
             Vector<String> listabridova=new Vector<>();
             if (usmjereniradio.isSelected()) {
@@ -535,6 +548,19 @@ public class Gui extends javax.swing.JFrame {
         String text3 = maxweight.getText();
         try {
             vertexnumber = Integer.parseInt(text);
+            if (vertexnumber>50) {
+                nacrtaj.setEnabled(false);
+                bellfordbut.setEnabled(false);
+                dijkbut.setEnabled(false);
+                floydbut.setEnabled(false);
+                nonatbut.setEnabled(false);
+            } else {
+                nacrtaj.setEnabled(true);
+                bellfordbut.setEnabled(true);
+                dijkbut.setEnabled(true);
+                floydbut.setEnabled(true);
+                nonatbut.setEnabled(true);
+            }
             double density = Double.parseDouble(text2);
             int mw = Integer.parseInt(text3);
             graph = Graph.randomGraph(vertexnumber, usmjereniradio.isSelected(), density, mw);
@@ -591,11 +617,13 @@ public class Gui extends javax.swing.JFrame {
                     nacrtaj.setEnabled(false);
                     bellfordbut.setEnabled(false);
                     dijkbut.setEnabled(false);
+                    floydbut.setEnabled(false);
                     nonatbut.setEnabled(false);
                 } else {
                     nacrtaj.setEnabled(true);
                     bellfordbut.setEnabled(true);
                     dijkbut.setEnabled(true);
+                    floydbut.setEnabled(true);
                     nonatbut.setEnabled(true);
                 }
                 edgecombo.setModel(new javax.swing.DefaultComboBoxModel<>(listabridova));
@@ -716,6 +744,7 @@ public class Gui extends javax.swing.JFrame {
         nacrtaj.setEnabled(false);
         bellfordbut.setEnabled(false);
         dijkbut.setEnabled(false);
+        floydbut.setEnabled(false);
         nonatbut.setEnabled(false);
     }//GEN-LAST:event_usmjereniradioActionPerformed
 
@@ -723,6 +752,7 @@ public class Gui extends javax.swing.JFrame {
         nacrtaj.setEnabled(true);
         bellfordbut.setEnabled(true);
         dijkbut.setEnabled(true);
+        floydbut.setEnabled(true);
         nonatbut.setEnabled(true);
     }//GEN-LAST:event_neusmjereniradioActionPerformed
     
