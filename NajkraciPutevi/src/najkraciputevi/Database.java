@@ -27,9 +27,9 @@ import java.util.logging.Logger;
 
 public final class Database {
     
-    String databaseName = "najkraciPutevi.db";
-    String url = "jdbc:sqlite:" + databaseName ;
-    Connection conn;
+    private String databaseName = "najkraciPutevi.db";
+    private String url = "jdbc:sqlite:" + databaseName ;
+    private Connection conn = DriverManager.getConnection( url );
     
     /* konstruktor stvara bazu i tablice (ako ne postoje) te
      * popuni tablicu algorithm
@@ -45,8 +45,8 @@ public final class Database {
         try  {
             if ( conn != null ) {
                 DatabaseMetaData meta = conn.getMetaData () ;
-                System.out.println("Ime biblioteke za rad s bazom podataka " + meta.getDriverName() ) ;
-                System.out.println(" Stvorena je nova baza.") ;
+                //System.out.println("Ime biblioteke za rad s bazom podataka " + meta.getDriverName() ) ;
+                //System.out.println(" Stvorena je nova baza.") ;
             }
         } 
        catch ( SQLException e ) {
@@ -86,19 +86,6 @@ public final class Database {
         }
     }
     
-    /*public void createAlgorithmTable() 
-    {
-        String sql = " CREATE TABLE IF NOT EXISTS algorithm (\n"+ 
-          " name text PRIMARY KEY ,\n" 
-          + "neg_weights integer NOT NULL" + ");";
-        try ( Connection conn = DriverManager.getConnection( url );
-        Statement stmt = conn.createStatement() ) {
-            if ( conn != null ) { stmt.execute ( sql ) ;}
-        } 
-        catch ( SQLException e ) {
-            System.out.println( e.getMessage() ) ; 
-        }
-    }*/
     
     public void createEdgeTable()
     {
@@ -326,7 +313,7 @@ public final class Database {
     
     public CompletedAlgorithm selectCompletedAlgorithmByGraphIdandAlgName( int id, String alg_name)
     {
-        CompletedAlgorithm alg = new CompletedAlgorithm();
+        CompletedAlgorithm alg;
         String sql = "SELECT * FROM completed_algorithm "
                 + "WHERE graph_id = ? AND alg_name = ?";
         try {
@@ -348,6 +335,7 @@ public final class Database {
         } 
         catch ( SQLException e ) {
             System.out.println( e.getMessage () ) ;
+            return null;
            
         }
         return alg;
