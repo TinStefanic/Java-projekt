@@ -21,6 +21,7 @@ public class AlgorithmThread extends SwingWorker<Integer, Void>{
     javax.swing.JTextArea textbox;
     long extime;
     int exresult;
+    boolean pathExists;
     
     
     public AlgorithmThread( GraphAlgorithm Alg, Database d, int id, int s, int e, javax.swing.JTextArea tb)
@@ -35,17 +36,27 @@ public class AlgorithmThread extends SwingWorker<Integer, Void>{
     
     @Override protected Integer doInBackground () throws Exception 
     {
-        exresult = alg.query(start, end);
-        extime = alg.getLastTime();
-        db.insertCompletedAlgorithm( graph_id, alg.getName(), extime, exresult, start, end );
-        return exresult;
+        if (alg.query(start, end) != null) {
+            exresult = alg.getLastResult();
+            extime = alg.getLastTime();
+            db.insertCompletedAlgorithm( graph_id, alg.getName(), extime, exresult, start, end );
+            pathExists = true;
+            return exresult;
+        } else {
+            extime = alg.getLastTime();
+            pathExists = false;
+            return null;
+        }
     }
     
     protected void done()
     {
         try {
-            int res = get();
-            textbox.append(String.valueOf(extime)+" ns\r\nCijena najkraćeg puta je: "+String.valueOf(exresult));
+            Integer res = get();
+            if (pathExists)
+                textbox.setText(String.valueOf(extime)+" ns\r\nCijena najkraćeg puta je: "+String.valueOf(exresult));
+            else
+                textbox.setText(String.valueOf(extime)+" ns\r\nNajkraći put ne postoji.");
         } catch (InterruptedException ex) {
             Logger.getLogger(AlgorithmThread.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
