@@ -44,6 +44,7 @@ public class Graph {
      * @param w težina brida.
      */
     public void addEdge(int start, int end, int w) {
+        if (w <= 0) return; // Težina mora biti pozitivna.
         if (start == end) return; // Ne dozvoljavamo petlje.
         gMatrix[start][end] = w;
         int pos = gNeighbour[start].indexOf(end);
@@ -118,18 +119,6 @@ public class Graph {
         return (Integer)gNeighbour[start].size();
     }
     
-    /**
-     * Provjerava ima li graf negativne bridove.
-     */
-    public boolean hasNegativeWeights() {
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (gMatrix[i][j] != null && gMatrix[i][j] < 0)
-                    return true;
-            }
-        }
-        return false;
-    }
     /**
      * Stvara random generirani graf s danim parametrima, bez negativnih bridova.
      * 
