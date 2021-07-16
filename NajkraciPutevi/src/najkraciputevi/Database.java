@@ -30,21 +30,27 @@ public final class Database {
     
     String databaseName = "najkraciPutevi.db";
     String url = "jdbc:sqlite:" + databaseName ;
+    Connection conn;
     
     /* konstruktor stvara bazu i tablice (ako ne postoje) te
      * popuni tablicu algorithm
     */
-    public Database() 
+    public Database()
     {
+        try {
+            this.conn = DriverManager.getConnection( url );
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
       
-        try ( Connection conn = DriverManager.getConnection( url ) ) {
+        try  {
             if ( conn != null ) {
                 DatabaseMetaData meta = conn.getMetaData () ;
                 System.out.println("Ime biblioteke za rad s bazom podataka " + meta.getDriverName() ) ;
                 System.out.println(" Stvorena je nova baza.") ;
             }
         } 
-        catch ( SQLException e ) {
+       catch ( SQLException e ) {
             System.out.println( e.getMessage() ) ;
         }
         
@@ -54,12 +60,12 @@ public final class Database {
     public void createTables()
     {
         createGraphTable();
-       // createAlgorithmTable();
+
         createEdgeTable();
         createCompletedAlgorithmTable();
         createShortestPathEdgeTable();
         
-        //this.insertAlgorithms();
+ 
     }
     
     public void createGraphTable()
@@ -69,9 +75,12 @@ public final class Database {
           " graph_id integer PRIMARY KEY,\n"
           + " num_of_v integer NOT NULL\n" + ");";
         
-        try ( Connection conn = DriverManager.getConnection( url );
-        Statement stmt = conn.createStatement() ) {
-            if ( conn != null ) { stmt.execute( sql ) ;}
+        try 
+         {
+            Connection conn = DriverManager.getConnection( url );
+            if ( conn != null ) { 
+                Statement stmt = conn.createStatement();
+                stmt.execute( sql ) ;}
         } 
         catch ( SQLException e ) {
             System.out.println( e.getMessage() ) ; 
@@ -101,7 +110,6 @@ public final class Database {
           + " end integer NOT NULL,\n" 
           + " weight integer NOT NULL\n" + ");";
         try ( 
-             
              Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
              if ( conn != null ) { stmt.execute( sql ) ;}
@@ -122,7 +130,7 @@ public final class Database {
           + " duration int NOT NULL,\n"
           + " result int NOT NULL\n);";
         try ( 
-             Connection conn = DriverManager.getConnection( url );
+            Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
              if ( conn != null ) { stmt.execute( sql ) ;}
         } 
@@ -155,16 +163,15 @@ public final class Database {
     public int insertGraph( Graph G ) //vraca id grafa
     {
         int id = rowCount("graph") + 1; // odredi id
-        String sql = "INSERT INTO graph(id,num_of_v) "
+        String sql = "INSERT INTO graph(graph_id,num_of_v) "
                 + "VALUES(?,?)" ;
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
-            pstmt.setInt(1 , id );
-            pstmt.setInt(2 , G.getN() );
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, G.getN());
             pstmt.executeUpdate ();
              }
-        catch ( SQLException e ) { }
+        catch ( SQLException e ) { System.out.println( e.getMessage() ); }
        
         for( int i = 0; i < G.getN(); ++i ){
             for( int j = 0; j <  G.getN(); ++j){
@@ -178,19 +185,18 @@ public final class Database {
     
     public void insertEdge( int graph_id, int start, int end, int weight )
     {
-       // int id = rowCount("edge") + 1; // odrediti id (row count + 1)
-        String sql = "INSERT INTO edge(graph_id,start,end,weight) "
+        int id = rowCount("edge") + 1; // odrediti id (row count + 1)
+        String sql = "INSERT INTO edge(id,graph_id,start,end,weight) "
                 + "VALUES(?,?,?,?)" ;
         
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
             
-           // pstmt.setInt(1 , id );
-            pstmt.setInt(1 , graph_id );
-            pstmt.setInt(2 , start );
-            pstmt.setInt(3 , end );
-            pstmt.setInt(4 , weight );
+            pstmt.setInt(1 , id );
+            pstmt.setInt(2 , graph_id );
+            pstmt.setInt(3 , start );
+            pstmt.setInt(4 , end );
+            pstmt.setInt(5 , weight );
             pstmt.executeUpdate ();
              }
         catch ( SQLException e ) { }
@@ -198,21 +204,20 @@ public final class Database {
     
     public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result, int start, int end)
     {
-        //int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
-        String sql = "INSERT INTO completed_algorithm(graph_id,alg_name,start,end,duration,result) "
+        int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
+        String sql = "INSERT INTO completed_algorithm(id,graph_id,alg_name,start,end,duration,result) "
                 + "VALUES(?,?,?,?,?,?)" ;
         
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
             
-           // pstmt.setInt(1 , id );
-            pstmt.setInt(1 , graph_id );
-            pstmt.setString(2 , alg_name );
-            pstmt.setInt(3 , start );
-            pstmt.setInt(4 , end );
-            pstmt.setLong(5 , time );
-            pstmt.setInt(6,  result );
+            pstmt.setInt(1 , id );
+            pstmt.setInt(2 , graph_id );
+            pstmt.setString(3 , alg_name );
+            pstmt.setInt(4 , start );
+            pstmt.setInt(5 , end );
+            pstmt.setLong(6 , time );
+            pstmt.setInt(7,  result );
             pstmt.executeUpdate ();
              }
         catch ( SQLException e ) { }
@@ -229,20 +234,19 @@ public final class Database {
     
     public void insertShortestPathEdge(Edge edge, int pos, int graph_id, String alg_name) //modificiraj
     {
-        //int id = rowCount("completed_algorithm") + 1;
-        String sql = "INSERT INTO shortest_path_edge(graph_id,alg_name,start,end,weight,pos)"
-                + "VALUES(?,?,?,?,?,?)" ;
+        int id = rowCount("completed_algorithm") + 1;
+        String sql = "INSERT INTO shortest_path_edge(id, graph_id,alg_name,start,end,weight,pos)"
+                + "VALUES(?,?,?,?,?,?,?)" ;
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement ( sql );
             
-            //pstmt.setInt(1 , id );
-            pstmt.setInt(1 , graph_id );
-            pstmt.setString(2 , alg_name );
-            pstmt.setInt(3 , edge.getStart() );
-            pstmt.setInt(4 , edge.getEnd() );
-            pstmt.setInt(5, edge.getWeight());
-            pstmt.setInt(6, pos);
+            pstmt.setInt(1 , id );
+            pstmt.setInt(2 , graph_id );
+            pstmt.setString(3 , alg_name );
+            pstmt.setInt(4 , edge.getStart() );
+            pstmt.setInt(5 , edge.getEnd() );
+            pstmt.setInt(6, edge.getWeight());
+            pstmt.setInt(7, pos);
             pstmt.executeUpdate ();
              }
         catch ( SQLException e ) { }
@@ -254,11 +258,10 @@ public final class Database {
         String sql = "SELECT num_of_v FROM graph "
                 + "WHERE graph_id = ?";
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setInt( 1, id );
             
-            ResultSet rs = pstmt.executeQuery( sql );
+            ResultSet rs = pstmt.executeQuery( );
             rs.next();
             Graph g = new Graph(rs.getInt("num_of_v"));
             ArrayList<Edge> edges = selectEdgesByGraphId(id);
@@ -282,10 +285,9 @@ public final class Database {
                 + "WHERE graph_id = ?";
         ArrayList<Edge> edges = new ArrayList<Edge>();
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setInt( 1, id );
-            ResultSet rs = pstmt.executeQuery( sql );
+            ResultSet rs = pstmt.executeQuery( );
             while( rs.next() ){
                 edges.add( new Edge(rs.getInt("start"), rs.getInt("end"), rs.getInt("weight")));
             }
@@ -303,11 +305,10 @@ public final class Database {
         String sql = "SELECT graph_id, alg_name, duration, result FROM completed_algorithm "
                 + "WHERE graph_id = ?";
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setInt( 1, id );
             
-            ResultSet rs = pstmt.executeQuery( sql );
+            ResultSet rs = pstmt.executeQuery(  );
             while ( rs.next() ) {
                String name = rs.getString("alg_name");
                long time = rs.getLong("duration");
@@ -330,12 +331,11 @@ public final class Database {
         String sql = "SELECT graph_id, alg_name, duration, result FROM completed_algorithm "
                 + "WHERE graph_id = ? AND alg_name = ?";
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setInt( 1, id );
             pstmt.setString( 2, alg_name );
             
-            ResultSet rs = pstmt.executeQuery( sql );
+            ResultSet rs = pstmt.executeQuery(  );
             if(rs.next()){
                String name = rs.getString("alg_name");
                long time = rs.getLong("duration");
@@ -360,12 +360,11 @@ public final class Database {
         ArrayList<Edge> edges = new ArrayList<Edge>();
         
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement( sql );
             pstmt.setInt( 1, graph_id );
             pstmt.setString(2, alg_name);
             
-            ResultSet rs = pstmt.executeQuery( sql );
+            ResultSet rs = pstmt.executeQuery( );
             while ( rs.next() ) {
                int start = rs.getInt("start");
                int end = rs.getInt("end");
@@ -383,6 +382,28 @@ public final class Database {
         return sp;
         
     }
+    
+    public ArrayList selectGraphIds()
+    {
+        ArrayList ids = new ArrayList();
+        String sql = "SELECT graph_id FROM graph "
+                + "ORDER BY graph_id ASC";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement( sql );
+            
+            ResultSet rs = pstmt.executeQuery( );
+            while ( rs.next() ) {
+               ids.add(rs.getInt("graph_id"));
+            }
+        } 
+        catch ( SQLException e ) {
+            System.out.println( e.getMessage () ) ;
+        }
+        
+        return ids;
+        
+    }
    
     
     public int rowCount( String column)
@@ -390,10 +411,9 @@ public final class Database {
         String sql = "SELECT count(*) FROM " + column + ";";
         int count = 0;
         try {
-            Connection conn = DriverManager.getConnection( url );
             PreparedStatement pstmt = conn.prepareStatement( sql );
             
-            ResultSet rs = pstmt.executeQuery( sql );
+            ResultSet rs = pstmt.executeQuery( );
             rs.next();
             count = rs.getInt(1);
             
