@@ -145,10 +145,8 @@ public class Graph {
         Graph ret = new Graph(n);
         density /= n;
         for (int i = 0; i < n; ++i) {
-            for (int j = (directed) ? 0 : i+1; j < n; ++j) {
+            for (int j = i+1; j < n; ++j) {
                 if (i == j) continue; // Ne dozvoljavamo petlje.
-                // Brid je već dodan.
-                if (ret.getWeightBetween(j, i) != null) continue;
                 if (rand.nextDouble() < density) {
                     int w = rand.nextInt(maxWeight)+1;
                     if (directed) {

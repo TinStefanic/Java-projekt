@@ -13,7 +13,7 @@ public class GraphAlgorithmTestOnly extends GraphAlgorithm{
     @Override
     protected Integer runAlgorithm(int start, int end) {
         try {
-            Thread.sleep((new Random()).nextInt(10000));
+            Thread.sleep((new Random()).nextInt(1000));
         } catch (Exception e) {};
         return (Integer)(new Random()).nextInt(100);
     }
