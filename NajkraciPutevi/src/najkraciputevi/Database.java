@@ -146,7 +146,7 @@ public final class Database {
     }
     
     
-    public int insertGraph( Graph G ) //vraca id grafa
+    synchronized public int insertGraph( Graph G ) //vraca id grafa
     {
         int id = rowCount("graph") + 1; // odredi id
         String sql = "INSERT INTO graph(graph_id,num_of_v) "
@@ -171,7 +171,7 @@ public final class Database {
         return id;
     }
     
-    public void insertEdge( int graph_id, int start, int end, int weight )
+    synchronized public void insertEdge( int graph_id, int start, int end, int weight )
     {
         int id = rowCount("edge") + 1; // odrediti id (row count + 1)
         String sql = "INSERT INTO edge(id,graph_id,start,end,weight) "
@@ -191,7 +191,7 @@ public final class Database {
         catch ( SQLException e ) { }
     }
     
-    public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result, int start, int end)
+    synchronized public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result, int start, int end)
     {
         int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
         String sql = "INSERT INTO completed_algorithm(id,graph_id,alg_name,start,end,duration,result) "
@@ -212,7 +212,7 @@ public final class Database {
         catch ( SQLException e ) { }
     }
     
-    public void insertShortestPath( ShortestPath sp, int graph_id, String alg_name) //modificiraj
+    synchronized public void insertShortestPath( ShortestPath sp, int graph_id, String alg_name) //modificiraj
     {   
         int i = 1;
         for(Edge edge: sp.getEdges()){
@@ -221,7 +221,7 @@ public final class Database {
         }
     }
     
-    public void insertShortestPathEdge(Edge edge, int pos, int graph_id, String alg_name) //modificiraj
+    synchronized public void insertShortestPathEdge(Edge edge, int pos, int graph_id, String alg_name) //modificiraj
     {
         int id = rowCount("shortest_path_edge") + 1;
         String sql = "INSERT INTO shortest_path_edge(id,graph_id,alg_name,start,end,weight,pos)"
