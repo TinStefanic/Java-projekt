@@ -29,7 +29,7 @@ public final class Database {
     
     private String databaseName = "najkraciPutevi.db";
     private String url = "jdbc:sqlite:" + databaseName ;
-    private Connection conn = DriverManager.getConnection( url );
+    Connection conn;
     
     /* konstruktor stvara bazu i tablice (ako ne postoje) te
      * popuni tablicu algorithm
@@ -76,7 +76,7 @@ public final class Database {
         
         try 
          {
-            Connection conn = DriverManager.getConnection( url );
+           // Connection conn = DriverManager.getConnection( url );
             if ( conn != null ) { 
                 Statement stmt = conn.createStatement();
                 stmt.execute( sql ) ;}
@@ -96,7 +96,7 @@ public final class Database {
           + " end integer NOT NULL,\n" 
           + " weight integer NOT NULL\n" + ");";
         try ( 
-             Connection conn = DriverManager.getConnection( url );
+             //Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
              if ( conn != null ) { stmt.execute( sql ) ;}
         } 
@@ -116,7 +116,7 @@ public final class Database {
           + " duration int NOT NULL,\n"
           + " result int NOT NULL\n);";
         try ( 
-            Connection conn = DriverManager.getConnection( url );
+            //Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
              if ( conn != null ) { stmt.execute( sql ) ;}
         } 
@@ -136,7 +136,7 @@ public final class Database {
           + " weight int NOT NULL,\n"
           + " pos int NOT NULL\n);";
         try ( 
-             Connection conn = DriverManager.getConnection( url );
+            // Connection conn = DriverManager.getConnection( url );
              Statement stmt = conn.createStatement() ) {
              if ( conn != null ) { stmt.execute( sql ) ;}
         } 
@@ -156,8 +156,10 @@ public final class Database {
             pstmt.setInt(1, id);
             pstmt.setInt(2, G.getN());
             pstmt.executeUpdate ();
-             }
+           
+            }
         catch ( SQLException e ) { System.out.println( e.getMessage() ); }
+        
        
         for( int i = 0; i < G.getN(); ++i ){
             for( int j = 0; j <  G.getN(); ++j){
@@ -184,6 +186,7 @@ public final class Database {
             pstmt.setInt(4 , end );
             pstmt.setInt(5 , weight );
             pstmt.executeUpdate ();
+            
              }
         catch ( SQLException e ) { }
     }
@@ -221,7 +224,7 @@ public final class Database {
     public void insertShortestPathEdge(Edge edge, int pos, int graph_id, String alg_name) //modificiraj
     {
         int id = rowCount("shortest_path_edge") + 1;
-        String sql = "INSERT INTO shortest_path_edge(id, graph_id,alg_name,start,end,weight,pos)"
+        String sql = "INSERT INTO shortest_path_edge(id,graph_id,alg_name,start,end,weight,pos)"
                 + "VALUES(?,?,?,?,?,?,?)" ;
         try {
             PreparedStatement pstmt = conn.prepareStatement ( sql );

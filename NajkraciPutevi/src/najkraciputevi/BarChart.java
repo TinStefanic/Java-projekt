@@ -52,7 +52,7 @@ public class BarChart {
         
         createDataset();
         CategoryAxis categoryAxis = new CategoryAxis("algorithm");
-        ValueAxis valueAxis = new NumberAxis("time in ms");
+        ValueAxis valueAxis = new NumberAxis("time in ns");
         valueAxis.setVisible(true);
          BarRenderer renderer = new BarRenderer() {
 
