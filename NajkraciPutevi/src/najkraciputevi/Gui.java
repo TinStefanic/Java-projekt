@@ -9,8 +9,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 
 
@@ -72,27 +74,30 @@ public class Gui extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         bellfordbut = new javax.swing.JButton();
-        dijkbut = new javax.swing.JButton();
-        floydbut = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        querydb = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         bellfordtb = new javax.swing.JTextArea();
         nonat = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         nonattb = new javax.swing.JTextArea();
-        nonatbut = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         startver = new javax.swing.JTextField();
         endver = new javax.swing.JTextField();
+        dijkbut = new javax.swing.JButton();
+        floydbut = new javax.swing.JButton();
+        nonatbut = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JSeparator();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        history = new javax.swing.JList<>();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         brojvrhovalabel.setText("Broj vrhova");
 
-        edgecombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
         edgecombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 edgecomboActionPerformed(evt);
@@ -106,11 +111,21 @@ public class Gui extends javax.swing.JFrame {
         });
 
         us_neus.add(usmjereniradio);
-        usmjereniradio.setSelected(true);
         usmjereniradio.setText("usmjereni");
+        usmjereniradio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usmjereniradioActionPerformed(evt);
+            }
+        });
 
         us_neus.add(neusmjereniradio);
+        neusmjereniradio.setSelected(true);
         neusmjereniradio.setText("neusmjereni");
+        neusmjereniradio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                neusmjereniradioActionPerformed(evt);
+            }
+        });
 
         emptybutton.setText("Stvori prazan graf");
         emptybutton.addActionListener(new java.awt.event.ActionListener() {
@@ -187,26 +202,17 @@ public class Gui extends javax.swing.JFrame {
 
         jLabel9.setText("Floyd-Warshall");
 
-        bellfordbut.setText("Prikaži rješenje");
+        bellfordbut.setText("Nacrtaj rješenje");
         bellfordbut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bellfordbutActionPerformed(evt);
             }
         });
 
-        dijkbut.setText("Prikaži rješenje");
-        dijkbut.addActionListener(new java.awt.event.ActionListener() {
+        querydb.setText("Dohvati iz baze");
+        querydb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dijkbutActionPerformed(evt);
-            }
-        });
-
-        floydbut.setText("Prikaži rješenje");
-
-        jButton4.setText("Povijest upita");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                querydbActionPerformed(evt);
             }
         });
 
@@ -222,14 +228,43 @@ public class Gui extends javax.swing.JFrame {
         nonattb.setRows(5);
         jScrollPane1.setViewportView(nonattb);
 
-        nonatbut.setText("Prikaži rješenje");
-
         jLabel11.setForeground(new java.awt.Color(255, 0, 0));
         jLabel11.setText("*obavezno");
 
         jLabel12.setText("Početni vrh");
 
         jLabel13.setText("Završni vrh");
+
+        dijkbut.setText("Nacrtaj rješenje");
+        dijkbut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dijkbutActionPerformed(evt);
+            }
+        });
+
+        floydbut.setText("Nacrtaj rješenje");
+        floydbut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                floydbutActionPerformed(evt);
+            }
+        });
+
+        nonatbut.setText("Nacrtaj rješenje");
+        nonatbut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nonatbutActionPerformed(evt);
+            }
+        });
+
+        history.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        history.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                historyValueChanged(evt);
+            }
+        });
+        jScrollPane5.setViewportView(history);
+
+        jLabel14.setText("Povijest upita");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -242,7 +277,6 @@ public class Gui extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addContainerGap()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(neusmjereniradio)
                                 .addComponent(usmjereniradio)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(edgecombo, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -253,7 +287,8 @@ public class Gui extends javax.swing.JFrame {
                                     .addGap(84, 84, 84)
                                     .addComponent(vercnt, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel11)))
+                                    .addComponent(jLabel11))
+                                .addComponent(neusmjereniradio))
                             .addGap(28, 28, 28))
                         .addComponent(jSeparator2))
                     .addComponent(jLabel2)
@@ -284,42 +319,43 @@ public class Gui extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(102, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nacrtaj)
-                            .addComponent(dijk)
-                            .addComponent(nonat)
-                            .addComponent(pokreni)
-                            .addComponent(jButton4)
-                            .addComponent(bellford)
-                            .addComponent(floyd)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(startver, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(endver, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(bellfordbut)
-                                .addComponent(jLabel7)
-                                .addComponent(dijkbut)
-                                .addComponent(jLabel8)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(floydbut)
-                                .addComponent(jLabel9)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel10)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(nonatbut)))
-                        .addGap(14, 14, 14))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(nacrtaj)
+                                .addComponent(dijk)
+                                .addComponent(nonat)
+                                .addComponent(pokreni)
+                                .addComponent(bellford)
+                                .addComponent(floyd)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel12)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(startver, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel13)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(endver, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(querydb)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel10)
+                            .addComponent(bellfordbut)
+                            .addComponent(nonatbut)
+                            .addComponent(floydbut)
+                            .addComponent(dijkbut)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane4)
+                            .addComponent(jScrollPane1))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,10 +371,11 @@ public class Gui extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(neusmjereniradio)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(usmjereniradio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(neusmjereniradio)
-                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(vercnt, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(brojvrhovalabel)
@@ -368,54 +405,67 @@ public class Gui extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(edgelen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(edgecombo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(nacrtaj)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(startver, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(endver, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bellford)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dijk)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(floyd)
-                        .addGap(1, 1, 1)
-                        .addComponent(nonat)
-                        .addGap(12, 12, 12)
-                        .addComponent(pokreni)
+                            .addComponent(edgecombo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bellfordbut)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(nacrtaj)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel12)
+                                    .addComponent(startver, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(endver, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel13))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bellford)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dijk)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(floyd)
+                                .addGap(1, 1, 1)
+                                .addComponent(nonat)
+                                .addGap(12, 12, 12)
+                                .addComponent(pokreni)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bellfordbut)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel8)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dijkbut)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(floydbut)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nonatbut)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(dijkbut))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(querydb)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane5))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(floydbut)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(nonatbut)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -423,6 +473,7 @@ public class Gui extends javax.swing.JFrame {
     
     int vertexnumber;
     Graph graph;
+    int id;
     
     private void edgelenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edgelenActionPerformed
         String text = edgelen.getText();
@@ -528,6 +579,25 @@ public class Gui extends javax.swing.JFrame {
                     for (int j=0; j<odvojeno.length; j++) graph.addEdge(i, j, Integer.parseInt(odvojeno[j]));
                     i++;
                 }
+                var usm = graph.isDirected();
+                if (usm) {
+                    usmjereniradio.setSelected(true);
+                    neusmjereniradio.setSelected(false);
+                } else {
+                    usmjereniradio.setSelected(false);
+                    neusmjereniradio.setSelected(true);
+                }
+                if (vertexnumber>50 || usm) {
+                    nacrtaj.setEnabled(false);
+                    bellfordbut.setEnabled(false);
+                    dijkbut.setEnabled(false);
+                    nonatbut.setEnabled(false);
+                } else {
+                    nacrtaj.setEnabled(true);
+                    bellfordbut.setEnabled(true);
+                    dijkbut.setEnabled(true);
+                    nonatbut.setEnabled(true);
+                }
                 edgecombo.setModel(new javax.swing.DefaultComboBoxModel<>(listabridova));
                 edgecomboActionPerformed(evt);
             } catch (IOException ex) {
@@ -546,7 +616,7 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_nacrtajActionPerformed
 
     private void pokreniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pokreniActionPerformed
-        int id = db.insertGraph(graph);
+        id = db.insertGraph(graph);
         String text = startver.getText();
         String text2 = endver.getText();
         try {
@@ -578,16 +648,83 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_pokreniActionPerformed
 
     private void bellfordbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bellfordbutActionPerformed
-        // TODO add your handling code here:
+        var sp = db.selectShortestPathByGraphAndAlg(id, "BellmanFord");
+        var dsp = new DrawShortestPath(graph,sp);
+        dsp.draw();
     }//GEN-LAST:event_bellfordbutActionPerformed
 
+    private void querydbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_querydbActionPerformed
+        ArrayList ids = db.selectGraphIds();
+        Vector<String> listagrafova=new Vector<>();
+        for (Object i: ids) {
+            int j = (int) i;
+            listagrafova.add("Graf "+j);
+        }
+        var model = new DefaultListModel();
+        model.addAll(listagrafova);
+        history.setModel(model);
+    }//GEN-LAST:event_querydbActionPerformed
+
     private void dijkbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dijkbutActionPerformed
-        // TODO add your handling code here:
+        var sp = db.selectShortestPathByGraphAndAlg(id, "Dijkstra");
+        var dsp = new DrawShortestPath(graph,sp);
+        dsp.draw();
     }//GEN-LAST:event_dijkbutActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void floydbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_floydbutActionPerformed
+        var sp = db.selectShortestPathByGraphAndAlg(id, "FloydWarshall");
+        var dsp = new DrawShortestPath(graph,sp);
+        dsp.draw();
+    }//GEN-LAST:event_floydbutActionPerformed
+
+    private void nonatbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonatbutActionPerformed
+        var sp = db.selectShortestPathByGraphAndAlg(id, "TestOnly");
+        var dsp = new DrawShortestPath(graph,sp);
+        dsp.draw();
+    }//GEN-LAST:event_nonatbutActionPerformed
+
+    private void historyValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_historyValueChanged
+        String odabrano = history.getSelectedValue();
+        int his_id=Integer.parseInt(odabrano.substring(5));
+        Graph his_graph=db.selectGraphById(his_id);
+        ArrayList<CompletedAlgorithm> his_zavrseni = db.selectCompletedAlgorithmsByGraphId(his_id);
+        for(CompletedAlgorithm zavrsen: his_zavrseni) {
+            switch(zavrsen.getName()) {
+                case "BellmanFord":
+                    bellfordtb.setText(String.valueOf(zavrsen.getTime())+" ns\r\nCijena najkraćeg puta je: "+String.valueOf(zavrsen.getResult()));
+                    break;
+                case "Dijkstra":
+                    dijktb.setText(String.valueOf(zavrsen.getTime())+" ns\r\nCijena najkraćeg puta je: "+String.valueOf(zavrsen.getResult()));
+                    break;
+                case "FloydWarshall":
+                    floydtb.setText(String.valueOf(zavrsen.getTime())+" ns\r\nCijena najkraćeg puta je: "+String.valueOf(zavrsen.getResult()));
+                    break;
+                case "TestOnly":
+                    nonattb.setText(String.valueOf(zavrsen.getTime())+" ns\r\nCijena najkraćeg puta je: "+String.valueOf(zavrsen.getResult()));
+                    break;
+            }
+        }
+        id=his_id;
+        graph=his_graph;
+        if (his_zavrseni.size()>0) {
+            startver.setText(String.valueOf(his_zavrseni.get(0).getStart()));
+            endver.setText(String.valueOf(his_zavrseni.get(0).getEnd()));
+        }
+    }//GEN-LAST:event_historyValueChanged
+
+    private void usmjereniradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usmjereniradioActionPerformed
+        nacrtaj.setEnabled(false);
+        bellfordbut.setEnabled(false);
+        dijkbut.setEnabled(false);
+        nonatbut.setEnabled(false);
+    }//GEN-LAST:event_usmjereniradioActionPerformed
+
+    private void neusmjereniradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_neusmjereniradioActionPerformed
+        nacrtaj.setEnabled(true);
+        bellfordbut.setEnabled(true);
+        dijkbut.setEnabled(true);
+        nonatbut.setEnabled(true);
+    }//GEN-LAST:event_neusmjereniradioActionPerformed
     
     /**
      * @param args the command line arguments
@@ -641,12 +778,13 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JCheckBox floyd;
     private javax.swing.JButton floydbut;
     private javax.swing.JTextArea floydtb;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JList<String> history;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -659,9 +797,11 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextField maxweight;
     private javax.swing.JButton nacrtaj;
     private javax.swing.JRadioButton neusmjereniradio;
@@ -669,6 +809,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JButton nonatbut;
     private javax.swing.JTextArea nonattb;
     private javax.swing.JButton pokreni;
+    private javax.swing.JButton querydb;
     private javax.swing.JTextField randensity;
     private javax.swing.JButton randombutton;
     private javax.swing.JTextField startver;
