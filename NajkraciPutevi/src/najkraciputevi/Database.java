@@ -21,9 +21,8 @@ import java.util.logging.Logger;
 /* baza se satoji od sljedećih tablica
  * graph - id, num_of_v
  * edge - id, graph_id, start, end, weight
- * algorithm - name, can_weights_be_negative //mozda netreba
  * completed_algorithm - id, graph_id, algorithm_name, duration, result
- * shortest_path_edge - id, graph_id, alg_name, start, end, weight, order - pamti bridove za najkraci put u grafu po algoritmu
+ * shortest_path_edge - id, graph_id, alg_name, start, end, weight, pos - pamti bridove za najkraci put u grafu po algoritmu
 */
 
 public final class Database {
@@ -262,7 +261,7 @@ public final class Database {
             pstmt.setInt( 1, id );
             
             ResultSet rs = pstmt.executeQuery( );
-            rs.next();
+            if(!rs.next()) return null;
             Graph g = new Graph(rs.getInt("num_of_v"));
             ArrayList<Edge> edges = selectEdgesByGraphId(id);
             for(Edge edge: edges){
@@ -302,7 +301,7 @@ public final class Database {
     public ArrayList<CompletedAlgorithm> selectCompletedAlgorithmsByGraphId( int id )
     {
         ArrayList<CompletedAlgorithm> alg = new ArrayList<CompletedAlgorithm>();
-        String sql = "SELECT graph_id, alg_name, duration, result FROM completed_algorithm "
+        String sql = "SELECT * FROM completed_algorithm "
                 + "WHERE graph_id = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement( sql );
@@ -328,7 +327,7 @@ public final class Database {
     public CompletedAlgorithm selectCompletedAlgorithmByGraphIdandAlgName( int id, String alg_name)
     {
         CompletedAlgorithm alg = new CompletedAlgorithm();
-        String sql = "SELECT graph_id, alg_name, duration, result FROM completed_algorithm "
+        String sql = "SELECT * FROM completed_algorithm "
                 + "WHERE graph_id = ? AND alg_name = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement( sql );
@@ -343,7 +342,8 @@ public final class Database {
                int start = rs.getInt("start");
                int end = rs.getInt("end");
                alg = new CompletedAlgorithm(name, time, result, start, end);
-        }
+            }
+            else return null;
             
         } 
         catch ( SQLException e ) {
@@ -375,6 +375,8 @@ public final class Database {
         catch ( SQLException e ) {
             System.out.println( e.getMessage () ) ;
         }
+        
+        if (edges.size() == 0 ) return null;
         
         ShortestPath sp = new ShortestPath(edges.get(0).getStart(), edges.get(edges.size()-1).getEnd());
         for(Edge edge: edges)
