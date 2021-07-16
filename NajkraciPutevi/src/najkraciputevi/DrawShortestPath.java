@@ -7,6 +7,7 @@ package najkraciputevi;
 
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
+import org.graphstream.ui.view.Viewer;
 
 /**
  *
@@ -61,6 +62,7 @@ public class DrawShortestPath {
                 }
             }
         }
-        graph.display();
+        Viewer viewer = graph.display();
+        viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
     }
 }

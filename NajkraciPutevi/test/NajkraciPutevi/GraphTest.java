@@ -93,16 +93,7 @@ public class GraphTest {
         assertEquals(g.getNumNeighbours(2), 2);
         assertEquals(g.getNumNeighbours(3), 0);
     }
-
-    /**
-     * Test of hasNegativeWeights method, of class Graph.
-     */
-    @Test
-    public void testHasNegativeWeights() {
-        assertEquals(g.hasNegativeWeights(), false);
-        assertEquals(gg.hasNegativeWeights(), true);
-    }
-
+    
     /**
      * Test of randomGraph method, of class Graph.
      */
