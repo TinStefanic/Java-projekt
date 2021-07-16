@@ -43,6 +43,11 @@ public class Gui extends javax.swing.JFrame {
         fileChooser = new javax.swing.JFileChooser();
         krivibroj = new javax.swing.JDialog();
         jLabel15 = new javax.swing.JLabel();
+        nonatbut = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        nonattb = new javax.swing.JTextArea();
+        nonat = new javax.swing.JCheckBox();
         vercnt = new javax.swing.JTextField();
         brojvrhovalabel = new javax.swing.JLabel();
         edgecombo = new javax.swing.JComboBox<>();
@@ -79,10 +84,6 @@ public class Gui extends javax.swing.JFrame {
         querydb = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         bellfordtb = new javax.swing.JTextArea();
-        nonat = new javax.swing.JCheckBox();
-        jLabel10 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        nonattb = new javax.swing.JTextArea();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -90,7 +91,6 @@ public class Gui extends javax.swing.JFrame {
         endver = new javax.swing.JTextField();
         dijkbut = new javax.swing.JButton();
         floydbut = new javax.swing.JButton();
-        nonatbut = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel14 = new javax.swing.JLabel();
         historycombo = new javax.swing.JComboBox<>();
@@ -117,6 +117,21 @@ public class Gui extends javax.swing.JFrame {
                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(77, Short.MAX_VALUE))
         );
+
+        nonatbut.setText("Nacrtaj rješenje");
+        nonatbut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nonatbutActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Non-native (test)");
+
+        nonattb.setColumns(20);
+        nonattb.setRows(5);
+        jScrollPane1.setViewportView(nonattb);
+
+        nonat.setText("Non-native");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -244,14 +259,6 @@ public class Gui extends javax.swing.JFrame {
         bellfordtb.setRows(5);
         jScrollPane4.setViewportView(bellfordtb);
 
-        nonat.setText("Non-native");
-
-        jLabel10.setText("Non-native (test)");
-
-        nonattb.setColumns(20);
-        nonattb.setRows(5);
-        jScrollPane1.setViewportView(nonattb);
-
         jLabel11.setForeground(new java.awt.Color(255, 0, 0));
         jLabel11.setText("*obavezno");
 
@@ -270,13 +277,6 @@ public class Gui extends javax.swing.JFrame {
         floydbut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 floydbutActionPerformed(evt);
-            }
-        });
-
-        nonatbut.setText("Nacrtaj rješenje");
-        nonatbut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nonatbutActionPerformed(evt);
             }
         });
 
@@ -353,7 +353,6 @@ public class Gui extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nacrtaj)
                             .addComponent(dijk)
-                            .addComponent(nonat)
                             .addComponent(bellford)
                             .addComponent(floyd)
                             .addGroup(layout.createSequentialGroup()
@@ -375,15 +374,12 @@ public class Gui extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(jLabel7)
                             .addComponent(jLabel8)
-                            .addComponent(jLabel10)
                             .addComponent(bellfordbut)
-                            .addComponent(nonatbut)
                             .addComponent(floydbut)
                             .addComponent(dijkbut)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                             .addComponent(jScrollPane2)
-                            .addComponent(jScrollPane4)
-                            .addComponent(jScrollPane1))
+                            .addComponent(jScrollPane4))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -435,7 +431,7 @@ public class Gui extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(edgelen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(edgecombo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 215, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -466,16 +462,14 @@ public class Gui extends javax.swing.JFrame {
                                 .addComponent(dijk)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(floyd)
-                                .addGap(1, 1, 1)
-                                .addComponent(nonat)
-                                .addGap(12, 12, 12)
+                                .addGap(36, 36, 36)
                                 .addComponent(pokreni)
                                 .addGap(18, 18, 18)
                                 .addComponent(analiziraj)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 6, Short.MAX_VALUE)
+                                .addGap(0, 30, Short.MAX_VALUE)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -489,13 +483,7 @@ public class Gui extends javax.swing.JFrame {
                                 .addComponent(querydb)
                                 .addGap(18, 18, 18)
                                 .addComponent(historycombo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(nonatbut)))
-                .addGap(24, 24, 24))
+                        .addGap(166, 166, 166))))
         );
 
         pack();
