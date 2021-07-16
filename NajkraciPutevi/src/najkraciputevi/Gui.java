@@ -92,9 +92,8 @@ public class Gui extends javax.swing.JFrame {
         floydbut = new javax.swing.JButton();
         nonatbut = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        history = new javax.swing.JList<>();
         jLabel14 = new javax.swing.JLabel();
+        historycombo = new javax.swing.JComboBox<>();
 
         krivibroj.setBounds(new java.awt.Rectangle(200, 200, 435, 292));
 
@@ -280,15 +279,13 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        history.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        history.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                historyValueChanged(evt);
+        jLabel14.setText("Povijest upita");
+
+        historycombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                historycomboActionPerformed(evt);
             }
         });
-        jScrollPane5.setViewportView(history);
-
-        jLabel14.setText("Povijest upita");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -363,8 +360,8 @@ public class Gui extends javax.swing.JFrame {
                                     .addComponent(endver, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(querydb)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel14))
+                            .addComponent(jLabel14)
+                            .addComponent(historycombo, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel9)
@@ -474,8 +471,8 @@ public class Gui extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(querydb)
                                 .addGap(18, 18, 18)
-                                .addComponent(jScrollPane5))
-                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(historycombo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -487,8 +484,8 @@ public class Gui extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(nonatbut)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(nonatbut)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(24, 24, 24))
         );
 
@@ -729,9 +726,7 @@ public class Gui extends javax.swing.JFrame {
             int j = (int) i;
             listagrafova.add("Graf "+j);
         }
-        var model = new DefaultListModel();
-        model.addAll(listagrafova);
-        history.setModel(model);
+        historycombo.setModel(new javax.swing.DefaultComboBoxModel<>(listagrafova));
     }//GEN-LAST:event_querydbActionPerformed
 
     private void dijkbutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dijkbutActionPerformed
@@ -755,8 +750,24 @@ public class Gui extends javax.swing.JFrame {
         dsp.draw();
     }//GEN-LAST:event_nonatbutActionPerformed
 
-    private void historyValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_historyValueChanged
-        String odabrano = history.getSelectedValue();
+    private void usmjereniradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usmjereniradioActionPerformed
+        nacrtaj.setEnabled(false);
+        bellfordbut.setEnabled(false);
+        dijkbut.setEnabled(false);
+        floydbut.setEnabled(false);
+        nonatbut.setEnabled(false);
+    }//GEN-LAST:event_usmjereniradioActionPerformed
+
+    private void neusmjereniradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_neusmjereniradioActionPerformed
+        nacrtaj.setEnabled(true);
+        bellfordbut.setEnabled(true);
+        dijkbut.setEnabled(true);
+        floydbut.setEnabled(true);
+        nonatbut.setEnabled(true);
+    }//GEN-LAST:event_neusmjereniradioActionPerformed
+
+    private void historycomboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historycomboActionPerformed
+        String odabrano = (String) historycombo.getSelectedItem();
         int his_id=Integer.parseInt(odabrano.substring(5));
         Graph his_graph=db.selectGraphById(his_id);
         ArrayList<CompletedAlgorithm> his_zavrseni = db.selectCompletedAlgorithmsByGraphId(his_id);
@@ -782,23 +793,28 @@ public class Gui extends javax.swing.JFrame {
             startver.setText(String.valueOf(his_zavrseni.get(0).getStart()));
             endver.setText(String.valueOf(his_zavrseni.get(0).getEnd()));
         }
-    }//GEN-LAST:event_historyValueChanged
-
-    private void usmjereniradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usmjereniradioActionPerformed
-        nacrtaj.setEnabled(false);
-        bellfordbut.setEnabled(false);
-        dijkbut.setEnabled(false);
-        floydbut.setEnabled(false);
-        nonatbut.setEnabled(false);
-    }//GEN-LAST:event_usmjereniradioActionPerformed
-
-    private void neusmjereniradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_neusmjereniradioActionPerformed
-        nacrtaj.setEnabled(true);
-        bellfordbut.setEnabled(true);
-        dijkbut.setEnabled(true);
-        floydbut.setEnabled(true);
-        nonatbut.setEnabled(true);
-    }//GEN-LAST:event_neusmjereniradioActionPerformed
+        var usm = graph.isDirected();
+        if (usm) {
+            usmjereniradio.setSelected(true);
+            neusmjereniradio.setSelected(false);
+        } else {
+            usmjereniradio.setSelected(false);
+            neusmjereniradio.setSelected(true);
+        }
+        if (vertexnumber>50 || usm) {
+            nacrtaj.setEnabled(false);
+            bellfordbut.setEnabled(false);
+            dijkbut.setEnabled(false);
+            floydbut.setEnabled(false);
+            nonatbut.setEnabled(false);
+        } else {
+            nacrtaj.setEnabled(true);
+            bellfordbut.setEnabled(true);
+            dijkbut.setEnabled(true);
+            floydbut.setEnabled(true);
+            nonatbut.setEnabled(true);
+        }
+    }//GEN-LAST:event_historycomboActionPerformed
     
     /**
      * @param args the command line arguments
@@ -852,7 +868,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JCheckBox floyd;
     private javax.swing.JButton floydbut;
     private javax.swing.JTextArea floydtb;
-    private javax.swing.JList<String> history;
+    private javax.swing.JComboBox<String> historycombo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -872,7 +888,6 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
