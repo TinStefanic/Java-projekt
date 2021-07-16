@@ -30,7 +30,7 @@ public final class Database {
     private String databaseName = "najkraciPutevi.db";
     private String url = "jdbc:sqlite:" + databaseName ;
     Connection conn;
-    
+
     /* konstruktor stvara bazu i tablice (ako ne postoje) te
      * popuni tablicu algorithm
     */
