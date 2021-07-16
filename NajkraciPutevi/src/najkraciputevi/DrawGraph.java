@@ -31,12 +31,14 @@ public class DrawGraph {
         for(int i = 0; i < g.getN(); ++i)
            graph.addNode(Integer.toString(i)).setAttribute("label", Integer.toString(i));
 	for(int i = 0; i < g.getN(); ++i){
-            for( int j = i; j< g.getN(); ++j){
+            for( int j = 0; j< g.getN(); ++j){
                 var w = g.getWeightBetween(i,j);
                 if( w != null){
                     String is = Integer.toString(i);
                     String js = Integer.toString(j);
-                    graph.addEdge(is+js, is, js).setAttribute("length", w);
+                    Node n = graph.getNode(is);
+                    if( !n.hasEdgeToward(js))
+                        graph.addEdge(is+js, is, js).setAttribute("length", w);
                 }
             }
         }
