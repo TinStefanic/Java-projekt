@@ -194,7 +194,7 @@ public final class Database {
     synchronized public void insertCompletedAlgorithm( int graph_id, String alg_name, long time, int result, int start, int end)
     {
        // int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
-        String sql = "INSERT INTO completed_algorithm(id,graph_id,alg_name,start,end,duration,result) "
+        String sql = "INSERT INTO completed_algorithm(graph_id,alg_name,start,end,duration,result) "
                 + "VALUES(?,?,?,?,?,?)" ;
         
         try {
