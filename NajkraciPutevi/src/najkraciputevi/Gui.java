@@ -785,6 +785,27 @@ public class Gui extends javax.swing.JFrame {
             startver.setText(String.valueOf(his_zavrseni.get(0).getStart()));
             endver.setText(String.valueOf(his_zavrseni.get(0).getEnd()));
         }
+        var usm = graph.isDirected();
+        if (usm) {
+            usmjereniradio.setSelected(true);
+            neusmjereniradio.setSelected(false);
+        } else {
+            usmjereniradio.setSelected(false);
+            neusmjereniradio.setSelected(true);
+        }
+        if (vertexnumber>50 || usm) {
+            nacrtaj.setEnabled(false);
+            bellfordbut.setEnabled(false);
+            dijkbut.setEnabled(false);
+            floydbut.setEnabled(false);
+            nonatbut.setEnabled(false);
+        } else {
+            nacrtaj.setEnabled(true);
+            bellfordbut.setEnabled(true);
+            dijkbut.setEnabled(true);
+            floydbut.setEnabled(true);
+            nonatbut.setEnabled(true);
+        }
     }//GEN-LAST:event_historycomboActionPerformed
     
     /**
