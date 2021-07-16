@@ -173,7 +173,7 @@ public final class Database {
     {
         int id = rowCount("edge") + 1; // odrediti id (row count + 1)
         String sql = "INSERT INTO edge(id,graph_id,start,end,weight) "
-                + "VALUES(?,?,?,?)" ;
+                + "VALUES(?,?,?,?,?)" ;
         
         try {
             PreparedStatement pstmt = conn.prepareStatement ( sql );
@@ -192,7 +192,7 @@ public final class Database {
     {
         int id = rowCount("completed_algorithm") + 1; // odrediti id (row count + 1)
         String sql = "INSERT INTO completed_algorithm(id,graph_id,alg_name,start,end,duration,result) "
-                + "VALUES(?,?,?,?,?,?)" ;
+                + "VALUES(?,?,?,?,?,?,?)" ;
         
         try {
             PreparedStatement pstmt = conn.prepareStatement ( sql );
