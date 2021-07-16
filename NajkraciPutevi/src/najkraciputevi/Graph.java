@@ -226,5 +226,17 @@ public class Graph {
             ret += "\n";
         }
         return ret;
-    } 
+    }
+    
+    /**
+     * Provjerava je li graf usmjeren. 
+     */
+    public boolean isDirected() {
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (gMatrix[i][j] != gMatrix[j][i]) return true;
+            }
+        }
+        return false;
+    }
 }

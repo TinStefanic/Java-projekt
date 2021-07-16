@@ -31,18 +31,6 @@ public class DatabaseTest {
     }
 
     /**
-     * Test of createAlgorithmTable method, of class Database.
-     */
-    @Test
-    public void testCreateAlgorithmTable() {
-        System.out.println("createAlgorithmTable");
-        Database instance = new Database();
-        instance.createAlgorithmTable();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of createEdgeTable method, of class Database.
      */
     @Test
