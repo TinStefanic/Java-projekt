@@ -234,7 +234,7 @@ public final class Database {
     
     public void insertShortestPathEdge(Edge edge, int pos, int graph_id, String alg_name) //modificiraj
     {
-        int id = rowCount("completed_algorithm") + 1;
+        int id = rowCount("shortest_path_edge") + 1;
         String sql = "INSERT INTO shortest_path_edge(id, graph_id,alg_name,start,end,weight,pos)"
                 + "VALUES(?,?,?,?,?,?,?)" ;
         try {
